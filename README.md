@@ -1,6 +1,6 @@
 # WepApp Starter
 This project is organized  as a npm [workspace](https://docs.npmjs.com/cli/v7/using-npm/workspaces).
-This is a monorepo for two projects as they will likely be deployed together.
+This is a monorepo for two projects.
 
 ```bash
 ./server
@@ -46,12 +46,12 @@ Follow the instructions on the page to get it.
 To build a docker image use the following command:
 
 ```bash
-docker build -t livehelp-server .
+docker build -t webapp-starter .
 ```
 
 To run use the following:
 ```bash
-docker run -d -p 8080:8080 [-e ENV_VAR=value]* livehelp-server:latest
+docker run -d -p 8080:8080 [-e ENV_VAR=value]* webapp-starter:latest
 ```
 
 e.g.
