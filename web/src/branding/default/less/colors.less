@@ -1,0 +1,146 @@
+// IMP: For other varijables such as padding etc. please take a look at /less/vars.less
+
+.colors-light {
+  @success-color: rgb(134, 170, 79);
+  @warn-color: rgb(221, 156, 64);
+  @info-color: rgb(70, 142, 201);
+  @error-color: rgb(215, 82, 82);
+
+  @accent-color: rgb(0, 173, 181);
+  @accent-text-color: rgb(255, 255, 255);
+  @base-color: rgb(255, 255, 255);
+  @bg-color: rgb(250, 250, 250);
+  @alt-bg-color: rgb(255, 255, 255); // #314458; // #d4e3e0;
+  @text-color: rgb(61, 67, 83);
+  @alt-text-color: rgb(38, 41, 47);
+  @selection-bg-color: fadeout(@accent-color, 20%);
+  @selection-text-color: @accent-text-color;
+
+  /*
+  @accent-color: #cd3652;
+  @accent-text-color: #fff;
+  @base-color: #dfdfdf;
+  @bg-color: #d8d7dc;
+  @alt-bg-color: #11252c; // #314458; // #d4e3e0;
+  @text-color: #242527;
+  @alt-text-color: #dff1f5;
+  */
+
+  // @selection-bg-color: fade(@accent-color, 70%);
+  // @selection-text-color: rgb(255, 255, 255);
+  // @selected-bg-color:rgba(0,0,0,0.06);
+
+  @active-bg-color: rgba(0,0,0,0.06);
+  @active-text-color: @text-color;
+  @primary-bg-color: @accent-color;
+  @primary-text-color: rgb(255, 255, 255);
+  @link-color: rgb(27, 96, 224);
+
+  @input-bg-color: lighten(@bg-color, 2%);
+  @input-text-color: @text-color;
+  @input-hint-color: desaturate(lighten(@text-color, 15%), 10%);
+  @input-label-color: @text-color;
+  @button-bg-color: darken(@base-color, 12%);
+  @button-text-color: @text-color;
+
+  @notification-bg-color: @alt-text-color;
+  @notification-text-color: @base-color;
+}
+
+.colors-dark {
+  @success-color: rgb(138, 220, 22);
+  @warn-color: rgb(255, 164, 37);
+  @info-color: rgb(0, 204, 255);
+  @error-color: rgb(233, 18, 18);
+  
+  @accent-color: rgb(0, 173, 181);
+  // @accent-color: #cd4736;
+  @accent-text-color: rgb(255, 255, 255);
+  @base-color: rgb(23, 28, 37);
+  @bg-color: rgb(31, 37, 49);
+  @alt-bg-color: lighten(@bg-color, 5%);
+
+  @text-color: rgb(238, 238, 238);
+  @alt-text-color: rgb(232, 228, 228);
+  @selection-bg-color: fadeout(@accent-color, 40%);
+  @selection-text-color: rgb(255, 255, 255);
+  // @selected-bg-color:rgba(0,0,0,0.06);
+  
+  @active-bg-color: fadeout(@accent-color, 70%);
+  @active-text-color: @text-color;
+  @primary-bg-color: @accent-color;
+  @primary-text-color: rgb(255, 255, 255);
+  @link-color: rgb(84, 135, 229);
+  
+  @input-bg-color: lighten(@bg-color, 5%);
+  @input-text-color: @text-color;
+  @input-hint-color: desaturate(darken(@text-color, 20%), 10%);
+  @input-label-color: @text-color;
+  @button-bg-color: darken(@base-color, 6%);
+  @button-text-color: @text-color;
+
+  @notification-bg-color: darken(@base-color, 2%);
+  @notification-text-color: @text-color;
+
+}
+
+.vars() {
+  --success-color: @success-color;
+  --warn-color: @warn-color;
+  --info-color: @info-color;
+  --error-color: @error-color;
+
+  // @accent-color: #f04f8b;
+  --accent-color: @accent-color;
+  --accent-text-color: @accent-text-color;
+  --base-color: @base-color;
+  --bg-color: @bg-color;
+  --alt-bg-color: @alt-bg-color; // #314458; // #d4e3e0;
+  --text-color: @text-color;
+  --alt-text-color: @alt-text-color;
+  --selection-bg-color: @selection-bg-color;
+  --selection-text-color: @selection-text-color;
+  --active-bg-color: @active-bg-color;
+  --active-text-color: @active-text-color;
+  --link-color: @link-color;
+  --primary-bg-color: @primary-bg-color;
+  --primary-text-color: @primary-text-color;
+
+  --overlay-bg-color: @alt-bg-color;
+  --overlay-text-color: @alt-text-color;
+
+  --input-bg-color: @input-bg-color;
+  --input-text-color: @input-text-color;
+  --input-hint-color: @input-hint-color;
+  --input-placeholder-text-color: fadeout(@text-color, 50%);
+  --input-disabled-bg-color: darken(@bg-color, 3%);
+  --input-disabled-text-color: darken(@text-color, 3%);
+  --input-focus-ring-color: fade(@link-color, 60%);
+  --button-bg-color: @button-bg-color;
+  --button-text-color: @button-text-color;
+
+  --notification-bg-color: @notification-bg-color;
+  --notification-text-color: @notification-text-color;
+  accent-color: var(--accent-color);
+}
+
+
+:root, :root[data-theme="light"] {  
+  .colors-light;
+  .vars();
+}
+
+:root[data-theme="dark"] {
+  .colors-dark;
+  .vars();
+}
+
+
+// /*
+@media (prefers-color-scheme: dark) {
+  :root {
+    .colors-dark;
+    .vars();
+  }
+}
+// */

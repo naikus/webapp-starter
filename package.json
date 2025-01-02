@@ -1,0 +1,16 @@
+{
+  "name": "@livehelp/bom",
+  "workspaces": [
+    "server",
+    "web"
+  ],
+  "author": "aniketn3@gmail.com",
+  "license": "See license in LICENSE.md",
+  "scripts": {
+    "web": "npm run dev --workspace=web",
+    "server": "npm run dev --workspace=server",
+    "build": "sh ./build-app.sh",
+    "clean": "rm -rf ./dist",
+    "refresh": "rm -rf ./dist ./node_modules"
+  }
+}

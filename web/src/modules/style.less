@@ -1,0 +1,77 @@
+@import "@less/vars.less";
+@import "@less/base.less";
+
+.form-view {
+  .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 20px;
+    position: relative;
+    // align-items: center;
+  }
+
+  .name-email {
+    .field-group-content {
+      .row {
+        padding: 0;
+        display: flex;
+        flex-direction: row;
+        input {
+          width: 120px;
+          margin-right: 4px;
+        }
+      }
+    }
+  }
+
+  .my-form {
+    // background-color: var(--base-color);
+    // padding: @padding-smaller;
+    border-radius: @base-border-radius * 2;
+
+    .color-chooser > .field-group-content {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      // justify-content: center;
+      .swatch {
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin: 6px;
+      }
+    }
+
+    > .field-container, .field-group {
+      background-color: var(--base-color);
+      margin: 12px 0;
+    }
+    .fu-content {
+      > .files {
+        max-height: 200px;
+      }
+    }
+  }
+
+  button.my-button {
+    margin: 0 16px 16px 0;
+    display: inline-block;
+  }
+
+  .message {
+    padding: 16px;
+    margin: 0px;
+    margin-bottom: 24px;
+    background-color: color-mix(in srgb, var(--accent-color) 15%, var(--base-color) 40%);
+    border-radius: 8px;
+    /* font-size: .9em; */
+  }
+}
+
+@media only screen and (min-width: 700px) {
+  .form-view {
+    margin: 0 15%;
+  }
+}

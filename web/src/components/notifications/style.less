@@ -1,0 +1,102 @@
+@import "@less/vars.less";
+@import "@less/css-helpers.less";
+
+@notification-transition-duration: 200ms;
+
+.notification {
+  display: flex;
+  // align-items: space-between;
+  position: absolute;
+  margin: 1% auto;
+  z-index: 100;
+
+  background-color: var(--notification-bg-color);
+  color: var(--notification-text-color);
+
+  border-radius: @base-border-radius;
+  padding: @padding-container;
+  box-sizing: border-box;
+  // border: 1px solid 1px solid rgba(0,0,0,0.2);
+
+  // Initial state
+  transform: translate3d(0, 50%, 0);
+  opacity: 0;
+  transition: transform @notification-transition-duration, opacity @notification-transition-duration;
+  width: 90%;
+  padding-left: @padding-container * 2;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: @padding-smaller;
+    bottom: @padding-smaller;
+    left: @padding-smaller;
+    width: 6px;
+    // height: 70%;
+    border-radius: @base-border-radius;
+    background-color: var(--alt-bg-color);
+    z-index: -1;
+  }
+
+  &.bottom {
+    bottom: 5%;
+    left: 5%;
+  }
+
+  &.top {
+    transform: translate3d(0, -50%, 0);
+    top: 5%;
+    bottom: auto;
+    left: 5%;
+  }
+
+  &.show {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+
+  &.toast {
+    &::after {
+      display: none;
+    }
+    padding-left: @padding-container;
+  }
+  &.info {
+    // border: 1px solid var(--info-color);
+    // background-color: color-mix(in srgb, var(--info-color) 15%, var(--base-color));
+    &::after {
+      background-color: var(--info-color);
+    }
+  }
+  &.success {
+    // border: 1px solid var(--success-color);
+    // background-color: color-mix(in srgb, var(--success-color) 15%, var(--base-color));
+    &::after {
+      background-color: var(--success-color);
+    }
+  }
+  &.warn {
+    // border: 1px solid var(--warn-color);
+    // background-color: color-mix(in srgb, var(--warn-color) 15%, var(--base-color));
+    &::after {
+      background-color: var(--warn-color);
+    }
+  }
+  &.error {
+    // border: 1px solid var(--error-color);
+    // background-color: color-mix(in srgb, var(--error-color) 15%, var(--base-color));
+    &::after {
+      background-color: var(--error-color);
+    }
+  }
+}
+
+
+@media only screen and (min-width: 600px) {
+  .notification {
+    width: 70%;
+    &.bottom, &.top {
+      left: 15%;
+    }
+  }
+}

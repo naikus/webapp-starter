@@ -1,0 +1,12 @@
+{
+  "extends": "@tsconfig/vite-react/tsconfig.json",
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "checkJs": true,
+    "paths": {
+      "@*": ["./src/*"]
+    }
+  },
+  "include": ["./externals.d.ts"],
+  "exclude": ["node_modules"]
+}
