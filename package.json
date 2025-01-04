@@ -1,5 +1,5 @@
 {
-  "name": "@livehelp/bom",
+  "name": "@webappstarter/bom",
   "workspaces": [
     "server",
     "web"

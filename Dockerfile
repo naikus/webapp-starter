@@ -22,10 +22,10 @@ RUN useradd -Ms /bin/bash ${APP_USER} \
     && echo ${APP_USER}:${APP_PASSWD} | /usr/sbin/chpasswd
 
 # Project dir
-RUN mkdir -p /opt/livehelp-server \
-    && chown -R ${APP_USER}:${APP_USER} /opt/livehelp-server
+RUN mkdir -p /opt/webapp-starter \
+    && chown -R ${APP_USER}:${APP_USER} /opt/webapp-starter
 
-WORKDIR /opt/livehelp-server
+WORKDIR /opt/webapp-starter
 # Copy binary and starter script
 COPY --chown=appuser:appuser dist/run-exec.sh    ./run-exec.sh
 COPY --chown=appuser:appuser dist/run.sh         ./run.sh
