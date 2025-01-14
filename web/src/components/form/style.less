@@ -1,7 +1,7 @@
 @import "@less/vars.less";
 
 @field-container-padding: @padding-container;
-@radio-indictor-size: 20px;
+@radio-indictor-size: @padding-container;
 
 form {
   label {
@@ -11,8 +11,9 @@ form {
 
 .checkbox-container, .radio-container {
     position: relative;
-    display: inline-block;
+    // display: flex;
     input {
+      appearance: none;
       width: @radio-indictor-size;
       height: @radio-indictor-size;
       margin: 0;
@@ -21,17 +22,17 @@ form {
       cursor: pointer;
     }
     .indicator {
-      display: inline-block;
-      cursor: pointer;
-      border-radius: @input-border-radius;
+      display: flex;
       width: @radio-indictor-size;
       height: @radio-indictor-size;
+      cursor: pointer;
+      border-radius: @input-border-radius;
       background-color: var(--input-bg-color);
       border: 1px solid rgba(0,0,0,0.07);
 
       &::after {
         content: "";
-        position: absolute;        
+        position: absolute;
         display: none;
       }
     }
@@ -56,14 +57,21 @@ form {
 
 .checkbox-container {
   .indicator {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     &::after {
       width: 4px;
-      height: 9px;
+      height: 8px;
+
+      width: @radio-indictor-size - 8;
+      height: @radio-indictor-size - 3;
+
       border: solid var(--accent-text-color);
-      border-width: 0 2px 2px 0;
-      transform: rotate(45deg);
-      top: 4px;
-      left: 8px;
+      border-width: 0px 3px 3px 0px;
+      transform: scale(0.6) translateY(-2px) rotate(40deg);
+      // top: 3px;
+      // left: 5px;
     }
   }
   input:disabled ~ .indicator {
@@ -77,13 +85,14 @@ form {
   .indicator {
     border-radius: 50%;
     &::after {
-      width: 10px;
-      height: 10px;
+      transform: scale(0.5);
+      width: @radio-indictor-size;
+      height: @radio-indictor-size;
       border-radius: 50%;
       background-color: var(--accent-text-color);
       border-width: 0;
-      top: 6px;
-      left: 6px;
+      // top: 3px;
+      // left: 3px;
     }
   }
   input:disabled ~ .indicator {
@@ -162,14 +171,19 @@ form {
   &.field-container-checkbox, &.field-container-radio {
     flex-direction: row-reverse;
     justify-content: flex-end;
+    align-items: center;
 
     > label {
       margin-left: @padding-smaller;
+      margin-top: @base-unit - 2;
     }
   }
   .checkbox-container, .radio-container {
     // margin-right: @padding-smaller;
-    margin-top: @base-unit - 4;
+    // margin-top: @base-unit - 4;
+    input {
+      margin: 0
+    }
   }
 
   .v-msg {
@@ -208,6 +222,7 @@ form {
   margin: 0;
   border: none;
   padding: 0;
+  display: flex;
 }
 .radio-group-item {
   display: inline-flex;
@@ -353,6 +368,9 @@ form {
         }
   
         > .file-details {
+          display: flex;
+          flex-direction: column;
+          gap: @padding-tiny;
           flex: 1;
           padding: @padding-smaller;
           text-overflow: clip;
