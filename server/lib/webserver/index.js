@@ -170,7 +170,7 @@ module.exports = {
 
     // Register the application server specific routes. e.g. /status, etc.
     server.register(serverRoutes);
-    await server.listen({port, host}, (err, address) => {
+    await server.listen({port, host}, (err/*, address*/) => {
       if(err) {
         server.log.error(err);
         process.exit(1);

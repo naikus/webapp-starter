@@ -20,7 +20,8 @@ const appContextModule = require("app-context"),
     // various services and modules
     webserver = require("./webserver"),
     about = require("./about"),
-    apiDocs = require("./api-docs");
+    apiDocs = require("./api-docs"),
+    persistence = require("./persistence");
 
 /**
  * Application is the starting point. Registers a web server and other services (presence, meeting)
@@ -48,8 +49,21 @@ function application(config) {
         }),
         context.register(about),
         context.register(webserver),
-        context.register(apiDocs)
-      ]).then(() => logger.info("Application started 🚀"));
+        context.register(apiDocs),
+        context.register(persistence)
+      ]).then(() => {
+        logger.info("Application started 🚀");
+        context.emit("app:initialize");
+      });
+
+      process.on("SIGTERM", async () => {
+        context.emit("app:shutdown");
+        process.exit(0);
+      });
+      process.on("SIGINT", async () => {
+        context.emit("app:shutdown");
+        process.exit(0);
+      });
     }
   };
 }

@@ -12,6 +12,15 @@ This is a monorepo for two projects.
 npm install
 ```
 
+# Create databases
+```bash
+cd ./server
+# Run migrations
+npm run migrate
+# Add seed dta
+npm run seed
+```
+
 # Start a dev server (api server)
 ```bash
 npm run server
@@ -29,18 +38,6 @@ Then
 cd dist
 sh ./run.sh
 ```
-
-To start local tunnel, in your root directory:
-
-```bash
-# To start the localtunnel
-npx lt --port 8080 --local-host "127.0.0.1" --print-requests
-OR
-npx lt --subdomain <subdomain> --port <local-port> --local-host "127.0.0.1" --print-requests
-```
-
-Copy the URL into the browser to access the app (The first time you'll be promped to enter your pubilc IP)
-Follow the instructions on the page to get it. 
 
 # Docker
 To build a docker image use the following command:
@@ -67,4 +64,13 @@ Following env values can be set:
 LOG_LEVEL=info
 API_LOG_LEVEL=debug
 DEBUG=true
+```
+
+
+# Adding seed data and creating new migrations
+```bash
+cd ./server
+npx knex --knexfile db/knexfile.js migrate:make <migration_name>
+# Seed
+npx knex --knexfile db/knexfile.js seed:make <seed_name>
 ```

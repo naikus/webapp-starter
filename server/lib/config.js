@@ -1,7 +1,9 @@
 /** @typedef {import("./types").Config} Config */
 
 const // os = require("os"),
-    {env} = process;
+    {env} = process,
+    knexfile = require("../db/knexfile"),
+    knexConfig = knexfile[env.NODE_ENV || "development"];
 
 /** @type {Config} */
 module.exports = {
@@ -50,6 +52,9 @@ module.exports = {
       type: process.env.AUTH_TYPE || "none"
     }
   },
+
+  /** @type {import("knex/types").knex.Knex.Config} */
+  persistence: knexConfig,
 
   logger: {
     targets: [

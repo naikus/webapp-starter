@@ -35,6 +35,9 @@ export type Config = {
       [key: string]: any;
     };
   };
+
+  persistence: import("knex/types").knex.Knex.Config;
+
   /** The logger configuration */
   logger: import("log4js").Configuration;
 };
