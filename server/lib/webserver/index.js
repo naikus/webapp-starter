@@ -9,13 +9,15 @@
  * @typedef {import("../config").Config} Config
  * @typedef {import("./types").Webapp} Webapp
  */
-
 const fs = require("fs"),
     Fastify = require("fastify"),
     cors = require("@fastify/cors"),
     helmet = require("@fastify/helmet"),
     formBody = require("@fastify/formbody"),
     multipart = require("@fastify/multipart"),
+    swagger = require("@fastify/swagger"),
+    scalar = require("@scalar/fastify-api-reference"),
+
     staticFileServer = require("@fastify/static"),
     // websocket = require("fastify-websocket"),
     logger = require("../util/logger")("Webserver"),
@@ -24,9 +26,9 @@ const fs = require("fs"),
 /**
  * Creates a new application
  * @param {Config} config The application configuration
- * @return {Promise<FastifyInstance>} The fastify instance
+ * @return {FastifyInstance} The fastify instance
  */
-async function createWebServer(config) {
+function createWebServer(config) {
   const {webserver: {ssl: {enabled: sslEnable, key: keyPath, cert: certPath}, security}, webapp} = config,
       serverOpts = {
         // logger: false,
@@ -67,47 +69,90 @@ async function createWebServer(config) {
 
   fastify.register(cors, {
     origin: "*"
-  })
-    // .after(pluginLoadedLogger("cors"))
-    .register(helmet, security)
-    .register(formBody, {})
-    .register(multipart, {})
-    // .register(websocket, {options: {maxPayload: 1048576}})
-    .register((webserver, opts, done) => {
-      webserver.get("/", (req, rep) => {
-        rep.redirect("/app/");
-      });
-      done();
+  });
+  // fastify.after(pluginLoadedLogger("cors"))
+  fastify.register(helmet, security);
+  fastify.register(formBody, {});
+  fastify.register(multipart, {});
+  // fastify.register(websocket, {options: {maxPayload: 1048576}})
+  fastify.register((webserver, opts, done) => {
+    webserver.get("/", (req, rep) => {
+      rep.redirect("/app/");
     });
+    done();
+  });
+  /*
+  fastify.after(() => {
+    console.log(fastify.printPlugins());
+  });
+  */
   return fastify;
+}
+
+/**
+ * @param {FastifyInstance} webserver
+ * @param {Config} config
+ */
+function setupApiDocs(webserver, config) {
+  const {webapp: {apiPath}} = config;
+  webserver.register(swagger, {
+    swagger: {
+      info: {
+        title: "Dashkit API",
+        description: "API for Dashkit.",
+        version: "1.0"
+      },
+      consumes: ["application/json"],
+      produces: ["application/json"]
+    }
+  }).register(scalar, {
+    // @ts-ignore
+    routePrefix: "/api-docs",
+    // @ts-ignore
+    configuration: {
+      spec: {
+        content: () => webserver.swagger()
+      }
+    }
+  });
 }
 
 /**
  * Creates a server module that other modules and add as a dependency
  * @param {FastifyInstance} webserver Fastify server instance
  * @param {Config} config Application configuration
- * @return {Webapp} The server module
+ * @return {Promise<Webapp>} The server module
  */
-function createServerModule(webserver, config) {
+async function createServerModule(webserver, config) {
   const {webapp: {apiPath}} = config;
-  // eslint-disable-next-line valid-jsdoc
-  /** @type {RequestHandler} */
-  // globalHook = async (req, rep) => {};
+
+  setupApiDocs(webserver, config);
+
+  /** @type {FastifyInstance} */
+  let apiServer;
+  await webserver.register(
+    (apiRoot, opts) => {
+      apiServer = apiRoot;
+    },
+    {prefix: apiPath}
+  );
 
   /** @satisfies {Webapp} */
   return {
-    server: webserver,
+    get server() {
+      return webserver;
+    },
+    async addApiHook(step, hook) {
+      apiServer.addHook(step, hook);
+    },
     async registerApi(apiReg, options = {}) {
+      apiReg(apiServer, options);
       /*
-      await webserver.register(async (apiServer, opts) => {
-        apiServer.addHook("onRequest", globalHook);
-        apiReg(apiServer, options);
-      });
-      */
-      await webserver.register(apiReg, {
-        prefix: options.prefix || apiPath,
+      apiServer.register(apiReg, {
+        prefix: apiPath,
         ...options
       });
+      */
     }
   };
 }
@@ -144,17 +189,20 @@ module.exports = {
     const [config] = await context.dependency("config"),
         // {config} = context,
         server = await createWebServer(config),
-        serverModule = createServerModule(server, config),
+        serverModule = await createServerModule(server, config),
         {webserver: {host, port}} = config;
 
     // Register the application server specific routes. e.g. /status, etc.
     server.register(serverRoutes);
-    await server.listen({port, host}, (err/*, address*/) => {
-      if(err) {
-        server.log.error(err);
-        process.exit(1);
-      }
-      // logger.info(`Web server started on ${address}`);
+
+    context.on("app:initialize", () => {
+      server.listen({port, host}, (err/*, address*/) => {
+        if(err) {
+          server.log.error(err);
+          process.exit(1);
+        }
+        // logger.info(`Web server started on ${address}`);
+      });
     });
 
     return serverModule;

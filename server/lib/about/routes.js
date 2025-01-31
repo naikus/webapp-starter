@@ -13,17 +13,33 @@
  *  config: Config
  * }} opts The options for this router registration
  */
-module.exports = async function aboutRoutes(api, opts) {
+module.exports = async function about(api, opts) {
   const {service/*, config*/} = opts;
 
   // use config in some way
-  // console.debug(config);
+  // console.debug("schemas", api.getSchemas());
+  // api.addSchema();
 
-  api.get("/about", (req, rep) => {
-    rep.send({
-      name: service.getAppName(),
-      version: service.getVersion(),
-      date: new Date()
-    });
+  api.get("/about", {
+    schema: {
+      response: {
+        200: {
+          id: "About",
+          type: "object",
+          properties: {
+            name: {type: "string"},
+            version: {type: "string"},
+            date: {type: "object"}
+          }
+        }
+      }
+    },
+    handler: (req, rep) => {
+      rep.send({
+        name: service.getAppName(),
+        version: service.getVersion(),
+        date: new Date()
+      });
+    }
   });
 };

@@ -20,7 +20,6 @@ const appContextModule = require("app-context"),
     // various services and modules
     webserver = require("./webserver"),
     about = require("./about"),
-    apiDocs = require("./api-docs"),
     persistence = require("./persistence");
 
 /**
@@ -49,7 +48,6 @@ function application(config) {
         }),
         context.register(about),
         context.register(webserver),
-        context.register(apiDocs),
         context.register(persistence)
       ]).then(() => {
         logger.info("Application started 🚀");
