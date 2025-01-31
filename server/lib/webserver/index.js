@@ -8,7 +8,6 @@
  * @typedef {import("app-context/types").ModuleDefn} ModuleDefn
  * @typedef {import("../config").Config} Config
  * @typedef {import("./types").Webapp} Webapp
- * @typedef {import("./authService").AuthService} AuthService
  */
 
 const fs = require("fs"),
@@ -20,7 +19,6 @@ const fs = require("fs"),
     staticFileServer = require("@fastify/static"),
     // websocket = require("fastify-websocket"),
     logger = require("../util/logger")("Webserver"),
-    Auth = require("./authService"),
     serverRoutes = require("./routes");
 
 /**
@@ -91,44 +89,25 @@ async function createWebServer(config) {
  * @return {Webapp} The server module
  */
 function createServerModule(webserver, config) {
-  const
-      /** @type {AuthService} */
-      authService = Auth.create(config),
-      {webapp: {auth, apiPath}} = config,
-      // eslint-disable-next-line valid-jsdoc
-      /** @type {RequestHandler} */
-      authHook = async (req, rep) => {
-        const {headers: {authorization = ""}} = req,
-            token = authorization.substring("Bearer ".length);
-        try {
-          await authService.verifyToken(token);
-        }catch(err) {
-          rep.code(401).send({
-            statusCode: 401,
-            error: "Unauthorized",
-            message: "Invalid access token"
-          });
-        }
-      };
+  const {webapp: {apiPath}} = config;
+  // eslint-disable-next-line valid-jsdoc
+  /** @type {RequestHandler} */
+  // globalHook = async (req, rep) => {};
 
   /** @satisfies {Webapp} */
   return {
     server: webserver,
     async registerApi(apiReg, options = {}) {
-      // API plugin where all the api routes are added
-      const {requiresAuth = true} = options;
-      await webserver.register(
-        async (apiServer/*, opts*/) => {
-          const authEnabled = auth.type !== "none";
-          if(authEnabled && requiresAuth) {
-            await apiServer.addHook("onRequest", authHook);
-          }
-          apiReg(apiServer, options);
-        },
-        {
-          prefix: options.prefix || apiPath
-        }
-      );
+      /*
+      await webserver.register(async (apiServer, opts) => {
+        apiServer.addHook("onRequest", globalHook);
+        apiReg(apiServer, options);
+      });
+      */
+      await webserver.register(apiReg, {
+        prefix: options.prefix || apiPath,
+        ...options
+      });
     }
   };
 }

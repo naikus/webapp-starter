@@ -13,7 +13,7 @@
  *  config: Config
  * }} opts The options for this router registration
  */
-module.exports = async function(api, opts) {
+module.exports = async function aboutRoutes(api, opts) {
   const {service/*, config*/} = opts;
 
   // use config in some way
