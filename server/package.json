@@ -1,5 +1,5 @@
 {
-  "name": "starter-server",
+  "name": "webapp-starter-api",
   "version": "1.0.0",
   "description": "API service webapp starter",
   "main": "lib/index.js",

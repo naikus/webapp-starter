@@ -24,7 +24,7 @@ const fs = require("fs"),
     serverRoutes = require("./routes");
 
 /**
- * Creates a new application
+ * Creates and sets up the web server
  * @param {Config} config The application configuration
  * @return {FastifyInstance} The fastify instance
  */
@@ -34,10 +34,10 @@ function createWebServer(config) {
         // logger: false,
         ///*
         logger: {
-          level: "debug"
+          level: "info"
         },
         //*/
-        http2: false
+        http2: true
       };
 
   if(sslEnable) {
@@ -98,8 +98,8 @@ function setupApiDocs(webserver, config) {
   webserver.register(swagger, {
     swagger: {
       info: {
-        title: "Dashkit API",
-        description: "API for Dashkit.",
+        title: "Webapp Starter API",
+        description: "API for Webapp Starter.",
         version: "1.0"
       },
       consumes: ["application/json"],
@@ -110,6 +110,10 @@ function setupApiDocs(webserver, config) {
     routePrefix: "/api-docs",
     // @ts-ignore
     configuration: {
+      theme: "alternate",
+      metaData: {
+        title: "Webapp Starter API Docs"
+      },
       spec: {
         content: () => webserver.swagger()
       }
