@@ -81,6 +81,8 @@ function createWebServer(config) {
     });
     done();
   });
+
+  setupApiDocs(fastify, config);
   /*
   fastify.after(() => {
     console.log(fastify.printPlugins());
@@ -95,7 +97,18 @@ function createWebServer(config) {
  */
 function setupApiDocs(webserver, config) {
   const {webapp: {apiPath}} = config;
+  // @ts-ignore
   webserver.register(swagger, {
+    // Gives a meaningful id to schema objects whenever possible instead of def-<number>
+    refResolver: {
+      // @ts-ignore
+      buildLocalReference (json, baseUri, fragment, i) {
+        if(!json.title && json.$id) {
+          json.title = json.$id;
+        }
+        return json.$id;
+      }
+    },
     swagger: {
       info: {
         title: "Webapp Starter API",
@@ -104,6 +117,12 @@ function setupApiDocs(webserver, config) {
       },
       consumes: ["application/json"],
       produces: ["application/json"]
+      /*
+      tags: [
+        {name: "About", description: "About Dashkit"},
+        {name: "HealthCheck", description: "Health status check"}
+      ]
+      */
     }
   }).register(scalar, {
     // @ts-ignore
@@ -129,9 +148,6 @@ function setupApiDocs(webserver, config) {
  */
 async function createServerModule(webserver, config) {
   const {webapp: {apiPath}} = config;
-
-  setupApiDocs(webserver, config);
-
   /** @type {FastifyInstance} */
   let apiServer;
   await webserver.register(

@@ -8,9 +8,14 @@
  * @para {PluginOpts} opts
  */
 module.exports = async function(server/*, opts */) {
-  server.get("/status", (req, rep) => {
-    rep.send({
-      status: "ok"
-    });
+  server.get("/status", {
+    schema: {
+      tags: ["HealthCheck"]
+    },
+    handler(req, rep) {
+      rep.send({
+        status: "ok"
+      });
+    }
   });
 };
