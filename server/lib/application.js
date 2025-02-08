@@ -32,27 +32,28 @@ function application(config) {
   /** @type {AppContext} */
   const context = appContextModule.create();
   // context.config = config;
-  context.on(
-    "context:init-module",
-    /** @type {EventListener} */
-    ({name}) => {
-      logger.info("Module '%s' initialized", name);
-    }
-  );
+  context.on("context:init-module", /** @type {EventListener} */({name}) => {
+    logger.info("Module '%s' initialized", name);
+  });
   return {
-    async start() {
-      Promise.all([
-        context.register({
+    start() {
+      context.register(about)
+        .register(webserver)
+        .register(persistence)
+        .register({
           name: "config",
           initialize: () => config
-        }),
-        context.register(about),
-        context.register(webserver),
-        context.register(persistence)
-      ]).then(() => {
-        logger.info("Application started 🚀");
-        context.emit("app:initialize");
-      });
+        });
+
+      context.start()
+        .then(() => {
+          logger.info("Application started 🚀");
+          context.emit("app:initialize");
+        })
+        .catch(e => {
+          logger.error("Application failed to start", e);
+          process.exit(1);
+        });
 
       process.on("SIGTERM", async () => {
         context.emit("app:shutdown");
