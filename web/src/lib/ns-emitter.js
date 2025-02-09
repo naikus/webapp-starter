@@ -141,12 +141,12 @@ const EventEmitterProto = {
       },
       emit(event, ...args) {
         const evInfo = eventInfo(event),
-          [ns, evt] = evInfo,
+          [ns, ...evt] = evInfo,
           defaultEmitter = emitters[""];
         let emitter;
         if (ns) {
           emitter = getOrCreateEmitter(ns);
-          emitter.emit(`${ns}:`, evt, ...args);
+          emitter.emit(`${ns}:`, evt.join(separator), ...args);
         }
         // console.log("Emitting", event, args);
         defaultEmitter.emit(event, ...args);
