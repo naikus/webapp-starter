@@ -31,28 +31,26 @@ function application(config) {
   /** @type {AppContext} */
   const context = AppContext.create();
   // context.config = config;
-  context.on(
-    "context:init-module",
-    /** @type {EventListener} */
-    ({name}) => {
-      logger.info("Module '%s' initialized", name);
-    }
-  );
+  context.on("context:init-module", /** @type {EventListener} */({name}) => {
+    logger.info("Module '%s' initialized", name);
+  });
   return {
-    async start() {
+    start() {
       context.register(about)
         .register(webserver)
         .register(persistence)
         .register({
           name: "config",
           initialize: () => config
-        })
-        .start()
+        });
+
+      context.start()
         .then(() => {
           logger.info("Application started 🚀");
           context.emit("app:initialize");
-        }).catch(error => {
-          logger.error("Application failed to start", error);
+        })
+        .catch(e => {
+          logger.error("Application failed to start", e);
           process.exit(1);
         });
 
