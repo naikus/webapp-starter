@@ -3,7 +3,7 @@
 /**
  * @typedef {import("app-context/types").AppContext} AppContext
  * @typedef {import("app-context/types").ModuleDefn} ModuleDefn
- * @typedef {import("app-context/types").AppContextModule} AppContextModule
+
  * @typedef {import("./config").Config} Config
  * @typedef {import("app-context/lib/namespaced-emitter").EventListener} EventListener
  */
@@ -13,8 +13,7 @@
  * @property {function} start The start of the applicatino
  */
 
-/** @type {AppContextModule} */
-const appContextModule = require("app-context"),
+const AppContext = require("app-context"),
     logger = require("./util/logger")("Application"),
     config = require("./config"),
     // various services and modules
@@ -30,7 +29,7 @@ const appContextModule = require("app-context"),
  */
 function application(config) {
   /** @type {AppContext} */
-  const context = appContextModule.create();
+  const context = AppContext.create();
   // context.config = config;
   context.on(
     "context:init-module",
@@ -41,18 +40,21 @@ function application(config) {
   );
   return {
     async start() {
-      Promise.all([
-        context.register({
+      context.register(about)
+        .register(webserver)
+        .register(persistence)
+        .register({
           name: "config",
           initialize: () => config
-        }),
-        context.register(about),
-        context.register(webserver),
-        context.register(persistence)
-      ]).then(() => {
-        logger.info("Application started 🚀");
-        context.emit("app:initialize");
-      });
+        })
+        .start()
+        .then(() => {
+          logger.info("Application started 🚀");
+          context.emit("app:initialize");
+        }).catch(error => {
+          logger.error("Application failed to start", error);
+          process.exit(1);
+        });
 
       process.on("SIGTERM", async () => {
         context.emit("app:shutdown");
