@@ -119,20 +119,22 @@ const View = props => {
             setData(data);
           }}>
           <FieldGroup className="color-chooser" label="Choose Accent Color">
-            {
-              colors.map((c, i) => (
-                <div className="swatch"
-                    key={`color-${i}`}
-                    style={{backgroundColor: c[0]}}
-                    data-color={c.join("|")} 
-                    onClick={chooseColor} />
-              ))
-            }
-            <div className="swatch"
-                title="Reset colors"
-                key={`color-reset`}
-                style={{backgroundColor: "black"}}
-                onClick={resetColors} />
+            <div className="swatches">
+              {
+                colors.map((c, i) => (
+                  <div className="swatch"
+                      key={`color-${i}`}
+                      style={{backgroundColor: c[0]}}
+                      data-color={c.join("|")} 
+                      onClick={chooseColor} />
+                ))
+              }
+              <div className="swatch"
+                  title="Reset colors"
+                  key={`color-reset`}
+                  style={{backgroundColor: "black"}}
+                  onClick={resetColors} />
+            </div>
           </FieldGroup>
           <FieldGroup label="Personal Info" className="name-email" hint="Name &amp; email">
             <div className="row">

@@ -12,15 +12,13 @@
   }
 
   .name-email {
-    .field-group-content {
-      .row {
-        padding: 0;
-        display: flex;
-        flex-direction: row;
-        input {
-          width: 120px;
-          margin-right: 4px;
-        }
+    .row {
+      padding: 0;
+      display: flex;
+      flex-direction: row;
+      input {
+        width: 120px;
+        margin-right: 4px;
       }
     }
   }
@@ -30,17 +28,19 @@
     // padding: @padding-smaller;
     border-radius: @base-border-radius * 2;
 
-    .color-chooser > .field-group-content {
+    .color-chooser {
       display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
+      flex-direction: column;
+      .swatches {
+        display: flex;
+      }
       // justify-content: center;
       .swatch {
         cursor: pointer;
-        width: 40px;
-        height: 40px;
+        width: 30px;
+        height: 30px;
         border-radius: 50%;
-        margin: 6px;
+        margin-right: 6px;
       }
     }
 
