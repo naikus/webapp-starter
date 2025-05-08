@@ -161,6 +161,11 @@ const ObjectToString = Object.prototype.toString,
           delete options.headers["Content-Type"];
           delete options.headers["content-type"];
         }
+
+        if("credentials" in this.options) {
+          options.credentials = this.options.credentials;
+        }
+
         const request = new Request(url, options), context = {path, options, request, response: null};
 
         let promise = Promise.resolve();
