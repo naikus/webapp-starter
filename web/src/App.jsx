@@ -14,7 +14,8 @@ import routes from "./routes";
 /**
  * @typedef {import("simple-router/src/types").Router} Router
  * @typedef {import("simple-router/src/types").RouteInfo} RouteInfo
- * @typedef {import("simple-router/src/types").create} createRouter 
+ * @typedef {import("simple-router/src/types").create} createRouter
+ * @typedef {import("./components/notifications/index").NotifyFunction} NotifyFunction
  */
 
 /**
@@ -128,6 +129,7 @@ function App({appBarPosition = "left"}) {
       {appBar = true} = config,
       transitionRef = useRef(null),
       transitionKey = route ? route.path : "root",
+      /** @type {NotifyFunction} */
       notify = useNotifications(),
       goAbout = useCallback(() => {
         routerRef.current && routerRef.current.route("/about");
@@ -163,8 +165,8 @@ function App({appBarPosition = "left"}) {
             /*
             let {requiresAuth} = config, authEnabled = true;
             if(authEnabled && requiresAuth) {
-              const authenticated = await authService.isAuthenticated();
-              if(!authenticated) {
+              const auth = await authService.getAuth();
+              if(!auth.user) {
                 // console.debug("Authentication required");
                 notify({
                   content: "Please sign in to continue",
