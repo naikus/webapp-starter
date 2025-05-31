@@ -1,4 +1,4 @@
-import {useRef, useState, useEffect} from "react";
+import {useRef, useState, useEffect, useCallback} from "react";
 
 /**
  * @typedef {import("react").SetStateAction<Error|null|undefined>} SetErrorAction
@@ -13,7 +13,7 @@ function useOnMount(callback) {
       ref.current = callback() || (() => {});
     }
     /**
-     * This is intntionally not returning a cleanup function the first time. We don't
+     * This is intentionally not returning a cleanup function the first time. We don't
      * want that. The cleanup function will only be returned on subsequent call. (i.e.
      * when the component is unmounted)
      */
@@ -93,10 +93,41 @@ function useEffectOnce(fn, deps = []) {
   }, deps);
 }
 
+function useGlobalKeyListener(when, key, callback) {
+  const wasOpened = useRef(false),
+      listener = useCallback((e) => {
+        if(e.key === key) {
+          window.requestAnimationFrame(callback);
+        }
+      }, []);
+
+  useEffect(() => {
+    if(when) {
+      // console.debug("Added event listener");
+      document.addEventListener("keyup", listener, true);
+      wasOpened.current = true;
+    }else {
+      if(wasOpened.current) {
+        // console.debug("Removed event listener");
+        document.removeEventListener("keyup", listener, true);
+      }
+    }
+
+    return () => {
+      if(wasOpened.current) {
+        // console.debug("Unregistered, removed key listener");
+        wasOpened.current = false;
+        document.removeEventListener("keyup", listener, true);
+      }
+    };
+  }, [when]);
+}
+
 
 export {
   useEffectOnce,
   useOnMount,
   useAsyncCall,
-  useAsyncCallImmediate
+  useAsyncCallImmediate,
+  useGlobalKeyListener
 };
