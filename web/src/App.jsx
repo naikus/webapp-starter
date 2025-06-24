@@ -72,7 +72,10 @@ function createViewWrapper(View) {
     className: PropTypes.string,
     context: PropTypes.object
   };
-  return Wrapper;
+  return React.memo(Wrapper, (prev, next) => {
+    // console.debug("Context same?", prev.context === next.context);
+    return prev.context === next.context;
+  });
 }
 
 
@@ -125,7 +128,7 @@ function App({appBarPosition = "left"}) {
         config: {appBar: false}
       }, setRouteContext] = useState(),
       [isRouteLoading, setRouteLoading] = useState(false),
-      {component: View, config = {}, route, data = {}} = routeContext,
+      {component: View, config = {}, route, data} = routeContext,
       {appBar = true} = config,
       transitionRef = useRef(null),
       transitionKey = route ? route.path : "root",
@@ -161,7 +164,7 @@ function App({appBarPosition = "left"}) {
           router.on("route", (context) => {
             // console.log("Setting route", context);
             // notify.toast(`Setting route ${context.route.runtimePath}`);
-            const {component, config = {}, data = {}} = context;
+            const {component /*, config = {}, data */} = context;
             /*
             let {requiresAuth} = config, authEnabled = true;
             if(authEnabled && requiresAuth) {
@@ -181,7 +184,9 @@ function App({appBarPosition = "left"}) {
             */
 
             if(component) {
-              context.component = memo(createViewWrapper(context.component));
+              // console.debug("Creating wrapper", component.displayName);
+              // A wrapper needs to be created every time as views are not cached
+              context.component = createViewWrapper(context.component);
             }
             setRouteLoading(false);
             setRouteContext(context);
