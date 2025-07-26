@@ -24,7 +24,6 @@
     "@vitejs/plugin-basic-ssl": "^1.2.0",
     "@vitejs/plugin-legacy": "^6.0.0",
     "@vitejs/plugin-react-swc": "^3.7.2",
-    "eslint": "^9.11.1",
     "eslint-plugin-react": "^7.37.0",
     "eslint-plugin-react-compiler": "^0.0.0-experimental-3cbe879-20240808",
     "less": "^4.1.3",

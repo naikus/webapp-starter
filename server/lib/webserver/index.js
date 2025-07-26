@@ -16,8 +16,6 @@ const fs = require("fs"),
     formBody = require("@fastify/formbody"),
     multipart = require("@fastify/multipart"),
     swagger = require("@fastify/swagger"),
-    scalar = require("@scalar/fastify-api-reference"),
-
     staticFileServer = require("@fastify/static"),
     // websocket = require("fastify-websocket"),
     logger = require("../util/logger")("Webserver"),
@@ -124,7 +122,7 @@ function setupApiDocs(webserver, config) {
       ]
       */
     }
-  }).register(scalar, {
+  }).register(import("@scalar/fastify-api-reference"), {
     // @ts-ignore
     routePrefix: "/api-docs",
     // @ts-ignore
