@@ -59,13 +59,13 @@ function FileUpload(props) {
       inputRef = useRef(), 
       NO_DISPLAY = {display: "none"},
       [data, setData] = useState(value || []),
-      fireChange = useCallback(data => {
+      fireChange = data => {
         const evt = createEvent(data);
         // @ts-ignore
         onInput && onInput(evt);
         // @ts-ignore
         onChange && onChange(evt);
-      }, []),
+      },
       files = data.map(file => {
         return (
           <FileItem key={file.name}

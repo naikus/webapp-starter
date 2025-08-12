@@ -51,7 +51,7 @@ function useAsyncCallImmediate(asyncCall, ...args) {
           return;
         }
         ref.current = true;
-        // setBusy(true);
+        // setBusy(true); the default setBusy state is true
         try {
           const res = await asyncCall(...args);
           setResult(res);
@@ -94,7 +94,7 @@ function useEffectOnce(fn, deps = []) {
 }
 
 function useGlobalKeyListener(when, key, callback) {
-  const wasOpened = useRef(false),
+  const registered = useRef(false),
       listener = useCallback((e) => {
         if(e.key === key) {
           window.requestAnimationFrame(callback);
@@ -105,22 +105,22 @@ function useGlobalKeyListener(when, key, callback) {
     if(when) {
       // console.debug("Added event listener");
       document.addEventListener("keyup", listener, true);
-      wasOpened.current = true;
+      registered.current = true;
     }else {
-      if(wasOpened.current) {
+      if(registered.current) {
         // console.debug("Removed event listener");
         document.removeEventListener("keyup", listener, true);
       }
     }
 
     return () => {
-      if(wasOpened.current) {
+      if(registered.current) {
         // console.debug("Unregistered, removed key listener");
-        wasOpened.current = false;
+        registered.current = false;
         document.removeEventListener("keyup", listener, true);
       }
     };
-  }, [when]);
+  }, [when, key]);
 }
 
 

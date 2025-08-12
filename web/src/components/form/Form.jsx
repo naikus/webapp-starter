@@ -213,6 +213,15 @@ const VALID = {valid: true, message: ""},
     */
 
 
+function debounce(fn, interval = 30, thisArg) {
+  let timeoutId;
+  const handler = thisArg ? fn.bind(thisArg) : fn;
+  return function(...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(handler, interval, ...args);
+  }
+}
+
 /**
  * @param {{
  *  label?: string,
@@ -742,10 +751,10 @@ function Form(props) {
           fieldsRef.current[field.name] = field;
         }
       },
-      updateField(field) {
+      updateField: debounce(function updateField(field) {
         // @ts-ignore
         dispatch({type: "update-field", payload: field});
-      },
+      }, 200),
       getField(name) {
         return form.fields[name];
       },
