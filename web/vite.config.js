@@ -3,7 +3,7 @@
 /* global process */
 import { resolve } from "path";
 import { defineConfig} from "vite";
-import react from "@vitejs/plugin-react";
+import react from "@vitejs/plugin-react-swc";
 import legacy from "@vitejs/plugin-legacy";
 import basicSSL from "@vitejs/plugin-basic-ssl";
 
