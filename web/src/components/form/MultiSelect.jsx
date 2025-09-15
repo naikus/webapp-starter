@@ -101,7 +101,7 @@ function MultiSelect(props) {
   return (
     <div tabIndex={0} ref={listElemRef}
         data-name={name}
-        className={`input multi-select ${disabled ? " disabled": ""} ${className}`}>
+        className={`select multi-select ${disabled ? " disabled": ""} ${className}`}>
       {items}
     </div>
   );

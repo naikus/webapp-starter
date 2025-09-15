@@ -3,7 +3,7 @@
 
 // form controls
 @form-component-border-radius: @input-border-radius;
-@form-component-padding: @padding-default;
+@form-component-padding: @padding-smaller;
 
 :root {
 
@@ -86,6 +86,16 @@ textarea {
   cursor: pointer;
   text-align: center;
   ._no-select;
+
+  &.ghost {
+    background-color: var(--bg-color);
+    border-color: transparent;
+    &:hover, &:focus {
+      background-color: var(--button-bg-color);
+      border-color: transparent;
+    }
+
+  }
 
   &:hover {
     // background-color: darken(@button-bg-color, 5%);

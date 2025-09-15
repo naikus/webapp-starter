@@ -14,7 +14,7 @@ import routes from "./routes";
 /**
  * @typedef {import("simple-router/src/types").Router} Router
  * @typedef {import("simple-router/src/types").RouteInfo} RouteInfo
- * @typedef {import("simple-router/src/types").create} createRouter
+ * @typedef {import("simple-router/src/types").create} createRouter 
  * @typedef {import("./components/notifications/index").NotifyFunction} NotifyFunction
  */
 
@@ -230,7 +230,7 @@ function App({appBarPosition = "left"}) {
             // position="top"
             title={Config.appName}
             logoAltText="Logo">
-            <button className="action"
+            <button className="action about-action"
                 title={`About ${Config.appName}`}
                 onClick={goAbout}
                 aria-label="About">

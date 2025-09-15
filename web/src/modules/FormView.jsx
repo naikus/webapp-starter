@@ -11,7 +11,6 @@ import {
   Form,
   Field,
   FieldGroup,
-  registerFieldType,
   ruleBuilder as rb,
   MultiValInput,
   MultiSelect,
@@ -50,9 +49,9 @@ const validationRules = {
 };
 
 // Register these with Form (to support validation, form data)
-registerFieldType("multival", MultiValInput);
-registerFieldType("multiselect", MultiSelect);
-registerFieldType("fileupload", FileUpload);
+Form.registerFieldType("multival", MultiValInput);
+Form.registerFieldType("multiselect", MultiSelect);
+Form.registerFieldType("fileupload", FileUpload);
 
 const View = props => {
   const {context: {formTitle}} = props, 
@@ -66,10 +65,10 @@ const View = props => {
       }),
       properties = ["--accent-color", "--selection-bg-color", "--active-bg-color", "--primary-bg-color"],
       [colors] = useState([
-        ["rgb(200, 89, 120)", "rgb(200, 89, 120)", "rgba(200, 89, 120, 0.3)", "rgb(200, 89, 120)"],
-        ["rgb(248, 141, 77)", "rgb(248, 141, 77)", "rgba(248, 141, 77, 0.3)", "rgb(248, 141, 77)"],
+        ["rgb(184, 63, 103)", "rgb(184, 63, 103)", "rgb(184, 63, 103, 0.3)", "rgb(184, 63, 103)"],
+        ["rgba(230, 143, 13, 1)", "rgba(230, 143, 13, 1)", "rgba(230, 143, 13, 0.2)", "rgba(230, 143, 13, 1)"],
         // ["rgb(213, 176, 31)", "rgb(213, 176, 31)", "rgba(213, 176, 31, 0.3)", "rgb(213, 176, 31)"],
-        ["rgb(55, 181, 242)", "rgb(55, 181, 242)", "rgba(55, 181, 242, 0.3)", "rgb(55, 181, 242)"],
+        ["rgba(46, 146, 196, 1)", "rgba(43, 139, 187, 1)", "rgba(55, 181, 242, 0.3)", "rgba(37, 124, 168, 1)"],
         ["rgb(65, 67, 106)", "rgb(65, 67, 106)", "rgba(65, 67, 106, 0.3)", "rgb(65, 67, 106)"]
       ]),
       chooseColor = event => {
@@ -90,6 +89,11 @@ const View = props => {
   return (
     <div className="view form-view">
       <Actions target=".app-bar > .actions">
+        <button className="back-button ghost"
+            onClick={() => (router && router.back())}
+            aria-label="Go Back">
+          <i className="icon-arrow-left" />
+        </button>
         <button title="Disabled if the form is invalid"
             className="action"
             onClick={() => notify({
@@ -113,7 +117,6 @@ const View = props => {
           rules={validationRules}
           className="my-form"
           onInit={form => {
-            // console.log(form);
             const {valid, data} = form;
             setValid(valid);
             setData(data);
@@ -204,7 +207,7 @@ const View = props => {
             }}>
               <i className="icon-save" /> Submit
             </button>
-            <button onClick={() => (
+            <button className="ghost" onClick={() => (
                 router && router.back("/")
               )}>
               <i className="icon-home" /> Home

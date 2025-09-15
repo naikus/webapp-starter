@@ -3,8 +3,8 @@ import React, {useCallback, useEffect, useState, useRef} from "react";
 import {useRouter} from "@components/router";
 import Actions from "@components/actionbar/Actions";
 import Overlay from "@components/overlay/Overlay";
-import {useGlobalKeyListener} from "@components/util/hooks";
 import {useNotifications} from "@components/notifications";
+import {useGlobalKeyListener} from "@components/util/hooks";
 import Config from "@config";
 
 function random(max, min = 0) {
@@ -54,7 +54,6 @@ function useEscapeClose(show, onCancel) {
 }
 */
 
-
 const View = props => {
   const {context} = props, 
       notify = useNotifications(),
@@ -80,7 +79,7 @@ const View = props => {
   useGlobalKeyListener(showOverlay, "Escape", () => setShowOverlay(false));
 
   // @ts-ignore
-  console.debug("Router", router.getCurrentRoute().params);
+  // console.debug("Router", router.getCurrentRoute().params);
   // console.debug("Context", context.queryParams.get("hello"));
   return (
     <div className="view landing-view">

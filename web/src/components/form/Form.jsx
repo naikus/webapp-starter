@@ -53,9 +53,9 @@ const VALID = {valid: true, message: ""},
     // objToString = Object.prototype.toString,
     // isArray = that => objToString.call(that).slice(8, -1) === "Array",
     isIos = () => /iPad|iPhone|iPod/.test(navigator.platform),
-    
+
     /** @type {Object.<string, (props: object, context: FormContext) => JSX.Element>} */
-    FIELD_TYPES = {
+    fieldTypes = {
       input(props) {
         return (
           <input type={props.type} {...props} />
@@ -131,7 +131,7 @@ const VALID = {valid: true, message: ""},
       },
       "radio-group": function radioGroup(props, context) {
         const {onInput, name, options = [], defaultValue, disabled: groupDisabled} = props,
-          {radio} = FIELD_TYPES,
+          {radio} = fieldTypes,
           clickHandler = e => {
             const v = e.target.value;
             onInput && onInput({target: {value: v}});
@@ -163,7 +163,7 @@ const VALID = {valid: true, message: ""},
     },
 
     registerFieldType = (type, fieldImpl) => {
-      FIELD_TYPES[type] = fieldImpl;
+      fieldTypes[type] = fieldImpl;
     },
     
     /**
@@ -357,7 +357,7 @@ function Field(props) {
         // onChange,
         type = "text"
       } = props,
-      typeRenderer = FIELD_TYPES[type] || FIELD_TYPES.input,
+      typeRenderer = fieldTypes[type] || fieldTypes.input,
       formContext = useForm();
 
   useOnMount(function addToFormContext() {
@@ -410,7 +410,7 @@ function Field(props) {
           // console.debug("On Input", name, target);
           updateField({name, value});
           onInput && onInput(e);
-        })
+        }, 100)
         /*
         onChange: e => {
           const value = e.target.value, {name} = props;
@@ -758,7 +758,6 @@ function Form(props) {
         // @ts-ignore
         dispatch({type: "update-field", payload: field});
       },
-
       getField(name) {
         return form.fields[name];
       },
@@ -786,7 +785,8 @@ Form.propTypes = {
   onChange: PropTypes.func,
   onSubmit: PropTypes.func
 };
+Form.registerFieldType = registerFieldType;
 
 export {
-  Form, Field, FieldGroup, registerFieldType
+  Form, Field, FieldGroup
 };
