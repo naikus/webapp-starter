@@ -248,7 +248,7 @@ function App({appBarPosition = "left"}) {
             {/* @ts-ignore */}
             {View
               // @ts-ignore
-              ? <View className={!appBar ? "no-appbar" : ""} context={data} ref={transitionRef} /> 
+              ? <View className={!appBar ? "no-appbar" : ""} context={{config, data}} ref={transitionRef} /> 
               : <div />
             }
           </CSSTransition>

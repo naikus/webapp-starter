@@ -1,6 +1,12 @@
 // import AboutView from "./modules/AboutView";
 // import LandingView from "./modules/LandingView";
 // import FormView from "./modules/FormView";
+import createApiClient, {responseAsJson} from "./lib/api-client";
+import Config from "./config";
+
+const Api = createApiClient({
+  apiUrl: Config.apiServer
+});
 
 /**
  * @typedef RouteControllerData
@@ -76,18 +82,30 @@ export default [
   {
     path: "/about",
     controller: async () => {
-      const AboutView = (await import("./modules/AboutView")).default;
+      const AboutView = (await import("./modules/AboutView")).default,
+          aboutRes = await Api.get("/about"),
+          aboutInfo = await responseAsJson(aboutRes);
 
+      return {
+        component: AboutView,
+        data: aboutInfo,
+        config: {
+          appBar: false
+        }
+      };
+      /*
       return new Promise((res, rej) => {
         setTimeout(() => {
           res({
             component: AboutView,
+            data: aboutInfo,
             config: {
               appBar: false
             }
           });
         }, 1000);
       });
+      */
     }
   }
 ];

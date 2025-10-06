@@ -211,7 +211,7 @@ module.exports = {
         {webserver: {host, port}} = config;
 
     // Register the application server specific routes. e.g. /status, etc.
-    server.register(serverRoutes);
+    server.register(serverRoutes, {config});
 
     context.on("app:initialize", () => {
       server.listen({port, host}, (err/*, address*/) => {

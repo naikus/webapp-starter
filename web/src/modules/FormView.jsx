@@ -54,7 +54,7 @@ Form.registerFieldType("multiselect", MultiSelect);
 Form.registerFieldType("fileupload", FileUpload);
 
 const View = props => {
-  const {context: {formTitle}} = props, 
+  const {context: {config, data: {formTitle = "Sample Form"}}} = props, 
       notify = useNotifications(),
       [valid, setValid] = useState(false),
       router = useRouter(),
@@ -65,11 +65,10 @@ const View = props => {
       }),
       properties = ["--accent-color", "--selection-bg-color", "--active-bg-color", "--primary-bg-color"],
       [colors] = useState([
-        ["rgb(184, 63, 103)", "rgb(184, 63, 103)", "rgb(184, 63, 103, 0.3)", "rgb(184, 63, 103)"],
+        ["rgba(184, 63, 103, 1)", "rgba(184, 63, 103, 1)", "rgba(184, 63, 103, 0.3)", "rgba(184, 63, 103, 1)"],
         ["rgba(230, 143, 13, 1)", "rgba(230, 143, 13, 1)", "rgba(230, 143, 13, 0.2)", "rgba(230, 143, 13, 1)"],
-        // ["rgb(213, 176, 31)", "rgb(213, 176, 31)", "rgba(213, 176, 31, 0.3)", "rgb(213, 176, 31)"],
         ["rgba(46, 146, 196, 1)", "rgba(43, 139, 187, 1)", "rgba(55, 181, 242, 0.3)", "rgba(37, 124, 168, 1)"],
-        ["rgb(65, 67, 106)", "rgb(65, 67, 106)", "rgba(65, 67, 106, 0.3)", "rgb(65, 67, 106)"]
+        ["rgba(65, 67, 106, 1)",  "rgba(65, 67, 106, 1)",  "rgba(65, 67, 106, 0.3)",  "rgb(65, 67, 106)"]
       ]),
       chooseColor = event => {
         const style = document.documentElement.style,
@@ -148,7 +147,7 @@ const View = props => {
           <FieldGroup label="Personal Info" className="name-email" hint="Name &amp; email">
             <div className="row">
               <Field placeholder="Name" defaultValue={data.name} id="name" name="name" />
-              <Field placeholder="Email" name="email" type="" />
+              <Field placeholder="Email" name="email" type="email" />
             </div>
             {/* @ts-ignore */}
             <Field defaultValue={"option1"} type="radio-group" name="option" options={[
@@ -173,7 +172,7 @@ const View = props => {
             options={[
               {label: "Basketball", value: "basketball"},
               {label: "Soccer", value: "soccer"},
-              {label: "Hockey", value: "hockey", disabled: true}
+              {label: "Hockey (Disabled Randomly)", value: "hockey", disabled: Math.round(Math.random()) === 1}
             ]} />
           <Field name="files"
             type="fileupload"
@@ -193,11 +192,12 @@ const View = props => {
                   }
                   return v;
                 },
-                " "
+                "  "
               );
               notify({
                 content: () => <pre style={{
                   width: "100%",
+                  fontFamily: "inherit",
                   fontSize: "0.7rem",
                   maxHeight: "350px",
                   overflowX: "auto"

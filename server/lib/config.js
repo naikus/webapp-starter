@@ -1,12 +1,16 @@
 /** @typedef {import("./types").Config} Config */
 
 const // os = require("os"),
+    pkg = require("../package.json"),
     {env} = process,
     knexfile = require("../db/knexfile"),
     knexConfig = knexfile[env.NODE_ENV || "development"];
 
 /** @type {Config} */
 module.exports = {
+  version: pkg.version,
+  description: pkg.description,
+
   webserver: {
     host: env.HOST || "0.0.0.0",
     port: env.PORT || 8000,
@@ -26,7 +30,7 @@ module.exports = {
             // Other external API servers that UI contacts directly
             // `https://${env.API_SERVER}`,
             // `wss://${env.API_SERVER}`,
-            "http://localhost:8080"
+            "https://localhost:8080"
           ],
           "script-src": ["'self'", "'unsafe-inline'"],
           "style-src":  ["'self'", "'unsafe-inline'"],
