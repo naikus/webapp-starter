@@ -82,10 +82,17 @@ export default [
   {
     path: "/about",
     controller: async () => {
-      const AboutView = (await import("./modules/AboutView")).default,
-          aboutRes = await Api.get("/about"),
-          aboutInfo = await responseAsJson(aboutRes);
+      const AboutView = (await import("./modules/AboutView")).default;
 
+      let aboutInfo;
+      try {
+        const aboutRes = await Api.get("/about");
+        aboutInfo = await responseAsJson(aboutRes);
+      }catch (e) {
+        aboutInfo = {
+          error: e
+        };
+      }
       return {
         component: AboutView,
         data: aboutInfo,

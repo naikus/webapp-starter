@@ -41,14 +41,17 @@ const View = props => {
             background-color: rgba(0,0,0,0.1);
             border-radius: 8px 8px 0 0;
           }
+          .about-view .list li.error {
+            color: var(--error-color);
+          }
         `}
       </style>
       <div className="content _text-center">
         <h3>{Config.appName} ({Config.appVersion})</h3>
         <ul className="list">
           <li className="title">Server Info</li>
-          <li>{data.description}</li>
-          <li>{data.version}</li>
+          <li className={`${data.error ? "error" : ""}`}>{data.error ? data.error.message : data.description}</li>
+          <li>{data.error ? "" : data.version}</li>
         </ul>
         <button className="primary inline" onClick={() => router && router.back()}>
           <i className="icon icon-arrow-left" /> Back
