@@ -1,8 +1,8 @@
 // @ts-nocheck
 /* global __dirname */
 /* global process */
-import { resolve } from "path";
-import { defineConfig} from "vite";
+import {resolve} from "path";
+import {defineConfig} from "vite";
 import react from "@vitejs/plugin-react-swc";
 import legacy from "@vitejs/plugin-legacy";
 import basicSSL from "@vitejs/plugin-basic-ssl";

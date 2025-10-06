@@ -30,7 +30,7 @@ module.exports = {
             // Other external API servers that UI contacts directly
             // `https://${env.API_SERVER}`,
             // `wss://${env.API_SERVER}`,
-            "https://localhost:8080"
+            "https://localhost:8000"
           ],
           "script-src": ["'self'", "'unsafe-inline'"],
           "style-src":  ["'self'", "'unsafe-inline'"],
