@@ -13,6 +13,9 @@
 // */
 .app-bar {
   height: @appbar-height;
+  display: flex;
+  align-items: center;
+  background-color: var(--base-color);
   .branding {
     flex: 1;
     padding: 0 @padding-default;
@@ -227,14 +230,14 @@
     // background-color: rgba(0,0,0,0.05);
     border-radius: @base-border-radius @base-border-radius 0 0;
     > h4, > p {
-      margin: @base-unit 0;
+      margin: @padding-tiny 0;
     }
     .icon {
       margin-right: @base-unit;
     }
   }
   > .content {
-    padding: 0 @padding-container + 4px @padding-container;
+    padding: 0 @padding-container @padding-container;
     flex: 3;
     // min-height: 100px;
   }

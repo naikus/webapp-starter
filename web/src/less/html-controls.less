@@ -88,13 +88,13 @@ textarea {
   ._no-select;
 
   &.ghost {
-    background-color: var(--bg-color);
+    background-color: transparent; // var(--bg-color);
     border-color: transparent;
     &:hover, &:focus {
       background-color: var(--button-bg-color);
       border-color: transparent;
+      box-shadow: none;
     }
-
   }
 
   &:hover {
