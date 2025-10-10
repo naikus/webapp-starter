@@ -3,12 +3,14 @@ import RouterContext from "./Context";
 
 /**
  * @typedef {import("simple-router").Router} Router
+ * @typedef {import("simple-router").RouteInfo} Route
  */
 
 
 /**
- * @returns {Router?}
+ * @returns {{route?: Route, router?: Router}}
  */
 export default function useRouter() {
-  return useContext(RouterContext);
+  const router = useContext(RouterContext);
+  return {route: router && router.getCurrentRoute(), router}
 }
