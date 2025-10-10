@@ -1,10 +1,10 @@
-import React, {useRef, useState, forwardRef, memo, useCallback} from "react";
+import React, {useRef, useState, forwardRef, useEffect, useCallback} from "react";
 import PropTypes from "prop-types";
 import {CSSTransition, SwitchTransition} from "react-transition-group";
 
 import "./App.less";
 
-import createRouter, {/*useRouter,*/ RouterProvider} from "@components/router";
+import createRouter, {useRouter, RouterProvider} from "@components/router";
 import Progress from "@components/progress/Progress";
 import Config from "@config";
 import {Notifications, useNotifications} from "@components/notifications";
@@ -89,18 +89,72 @@ function createViewWrapper(View) {
  * }} props 
  */
 const AppBar = props => {
-  const {title = "App", logo, logoAltText = "Logo", children} = props;
+  const {title = "App", logo, logoAltText = "Logo", children} = props,
+      {router} = useRouter(),
+      /*
+      [confirmLogout, setConfirmLogout] = useState(false),
+      showConfirmLogout = useCallback(() => {
+        setConfirmLogout(true)
+      }, []),
+      logout = useCallback(() => {
+        setConfirmLogout(false);
+        router && router.route("/logout");
+      }, [router]),
+      */
+      goAbout = useCallback(() => {
+        router && router.route("/about");
+      }, [router]);
+
+  /*
+  useGlobalKeyListener(confirmLogout, "Escape", function cancelLogout() {
+    setConfirmLogout(false);
+  });
+  */
+
   return (
-    <div className={`actionbar app-bar`}>
-      <div className="branding">
-        <img className="logo" alt={logoAltText} src={logo} />
-        <h2 className="title">{title}</h2>
+    <>
+      <div className={`actionbar app-bar`}>
+        <div className="branding">
+          <img className="logo" alt={logoAltText} src={logo} />
+          <h2 className="title">{title}</h2>
+        </div>
+        <div className="actions">
+          {
+            /*
+              * Actions used Views or anywhere else will appear here 
+              * Each view can define actions using the <Actions> component and those will appear here
+              */
+          }
+        </div>
+        <div className="actions global-actions">
+          <button className="action about-action"
+              title={`About ${Config.appName}`}
+              onClick={goAbout}
+              aria-label="About">
+            <i className="icon icon-info"></i>
+          </button>
+        </div>
       </div>
-      <div className="actions"></div>
-      <div className="actions global-actions">{children}</div>
-    </div>
+      {/** Logout Overlay */}
+      {/* 
+        <Overlay className={`top modal alert`}
+            show={confirmLogout}>
+          <div className="title">
+            <h4>Sign Out?</h4>
+          </div>
+          <div className="content">
+            Do you want to sign out?
+          </div>
+          <div className="actions">
+            <button className="inline" onClick={() => (setConfirmLogout(false))}>No</button>
+            <button className="primary inline" onClick={logout}>Sign Out</button>
+          </div>
+        </Overlay>
+      */}
+    </>
   );
 };
+AppBar.displayName = "AppBar";
 AppBar.propTypes = {
   title: PropTypes.string,
   logo: PropTypes.string,
@@ -109,10 +163,46 @@ AppBar.propTypes = {
 };
 
 
+
+/**
+ * @param {{
+ *  router: Router
+ * }} props 
+ */
+function RouteLoadingIndicator(props) {
+  const {router} = props,
+      [isRouteLoading, setRouteLoading] = useState(false);
+
+  useEffect(() => {
+    if(!router) {
+      return;
+    }
+
+    const unsubs = [
+      router.on("before-route", (data) => {
+        setRouteLoading(true);
+      }),
+      router.on("route", async (context) => {
+        setRouteLoading(false);
+      }),
+      router.on("route-error", (error) => {
+        setRouteLoading(false);
+      })
+    ];
+
+    return () => {
+      unsubs.forEach(unsub => unsub());
+    };
+  }, [router]);
+
+  return isRouteLoading ? <Progress className="global" /> : null;
+}
+RouteLoadingIndicator.displayName = "RouteLoadingIndicator";
+
+
 /**
  * @typedef {"top" | "left"} AppBarPosition
  */
-
 /**
  * 
  * @param {{
@@ -127,16 +217,12 @@ function App({appBarPosition = "left"}) {
       [routeContext = {
         config: {appBar: false}
       }, setRouteContext] = useState(),
-      [isRouteLoading, setRouteLoading] = useState(false),
       {component: View, config = {}, route, data} = routeContext,
       {appBar = true} = config,
       transitionRef = useRef(null),
       transitionKey = route ? route.path : "root",
       /** @type {NotifyFunction} */
-      notify = useNotifications(),
-      goAbout = useCallback(() => {
-        router && router.route("/about");
-      }, [router]);
+      notify = useNotifications();
 
   /*
   // Set theme based on system preference
@@ -158,9 +244,6 @@ function App({appBarPosition = "left"}) {
           errorRoute: "/~error"
         }),
         unsubs = [
-          router.on("before-route", (data) => {
-            setRouteLoading(true);
-          }),
           router.on("route", (context) => {
             // console.log("Setting route", context);
             // notify.toast(`Setting route ${context.route.runtimePath}`);
@@ -188,11 +271,10 @@ function App({appBarPosition = "left"}) {
               // A wrapper needs to be created every time as views are not cached
               context.component = createViewWrapper(context.component);
             }
-            setRouteLoading(false);
             setRouteContext(context);
           }),
           router.on("route-error", (error) => {
-            setRouteLoading(false);
+            // console.log(error);
             notify({
               content: (
                 <span>
@@ -217,6 +299,9 @@ function App({appBarPosition = "left"}) {
   });
 
   if(!router) {
+    // This message is because changes to the App.jsx don't work with viet hot reloading since the
+    // router is null when the app is unmounted
+    console.error("Please refresh the page");
     return null;
   }
 
@@ -226,19 +311,9 @@ function App({appBarPosition = "left"}) {
       <div className={`app appbar-${appBarPosition}`}>
         {appBar ? 
           // @ts-ignore
-          <AppBar logo={Config.logo}
-            // position="top"
-            title={Config.appName}
-            logoAltText="Logo">
-            <button className="action about-action"
-                title={`About ${Config.appName}`}
-                onClick={goAbout}
-                aria-label="About">
-              <i className="icon icon-info"></i>
-            </button>
-          </AppBar>
+          <AppBar logo={Config.logo} title={Config.appName} logoAltText="Logo" />
         : null}
-
+ 
         <SwitchTransition>
           {/* @ts-ignore */}
           <CSSTransition classNames={"fadeup"}
@@ -254,10 +329,7 @@ function App({appBarPosition = "left"}) {
           </CSSTransition>
         </SwitchTransition>
 
-        {isRouteLoading ? 
-          // @ts-ignore
-          <Progress className="global" /> 
-        : null}
+        <RouteLoadingIndicator router={router} />
         {/* @ts-ignore */}
         <Notifications  />
       </div>
