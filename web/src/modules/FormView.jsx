@@ -57,7 +57,7 @@ const View = props => {
   const {context: {config, data: {formTitle = "Sample Form"}}} = props, 
       notify = useNotifications(),
       [valid, setValid] = useState(false),
-      router = useRouter(),
+      {router} = useRouter(),
       [data, setData] = useState({
         name: "Dead Pool",
         sports: ["soccer", "hockey"],

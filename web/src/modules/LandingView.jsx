@@ -57,7 +57,7 @@ function useEscapeClose(show, onCancel) {
 const View = props => {
   const {context} = props, 
       notify = useNotifications(),
-      router = useRouter(), 
+      {router} = useRouter(), 
       toggleScheme = useCallback(() => {
         /** @type {HTMLElement} */
         // @ts-ignore
