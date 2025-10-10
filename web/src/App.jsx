@@ -301,7 +301,7 @@ function App({appBarPosition = "left"}) {
   if(!router) {
     // This message is because changes to the App.jsx don't work with viet hot reloading since the
     // router is null when the app is unmounted
-    console.error("Please refresh the page");
+    console.warn("Please refresh the page. Ignore if app is loaded");
     return null;
   }
 
