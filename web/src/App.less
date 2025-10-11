@@ -255,11 +255,20 @@
     }
   }
 }
+@media (prefers-color-scheme: dark) {
+  .alert {
+    > .actions {
+      background-color: rgba(0,0,0,0.16);
+    }
+  }
+}
 :root[data-theme="dark"] {
   .alert {
+    /*
     > .title {
       // background-color: rgba(255,255,255,0.05);
     }
+    */
     > .actions {
       background-color: rgba(0,0,0,0.16);
     }
