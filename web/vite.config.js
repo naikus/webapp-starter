@@ -5,7 +5,8 @@ import {resolve} from "path";
 import {defineConfig} from "vite";
 import react from "@vitejs/plugin-react-swc";
 import legacy from "@vitejs/plugin-legacy";
-import basicSSL from "@vitejs/plugin-basic-ssl";
+// Enable for https. See also: plugins section below
+// import basicSSL from "@vitejs/plugin-basic-ssl";
 
 // https://vitejs.dev/config/
 const APP_BRANDING = process.env.APP_BRANDING || "default";
@@ -47,9 +48,11 @@ export default defineConfig({
     }
   },
   plugins: [
+    /*
     basicSSL({
       certDir: "../server/certs"
     }),
+    */
     react({
       /*
       babel: {

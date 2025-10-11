@@ -35,7 +35,8 @@ function createWebServer(config) {
           level: "info"
         },
         //*/
-        http2: true
+        // Set to true only when using SSL (https). Ohterwise gives binary garbled response
+        http2: false
       };
 
   if(sslEnable) {
