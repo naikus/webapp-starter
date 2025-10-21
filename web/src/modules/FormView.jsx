@@ -53,10 +53,11 @@ Form.registerFieldType("multival", MultiValInput);
 Form.registerFieldType("multiselect", MultiSelect);
 Form.registerFieldType("fileupload", FileUpload);
 
-const View = props => {
-  const {context: {config, data: {formTitle = "Sample Form"}}} = props, 
-      notify = useNotifications(),
+
+const MyForm = props => {
+  const {title} = props,
       [valid, setValid] = useState(false),
+      notify = useNotifications(),
       {router} = useRouter(),
       [data, setData] = useState({
         name: "Dead Pool",
@@ -84,15 +85,9 @@ const View = props => {
         });
       };
 
-
   return (
-    <div className="view form-view">
+    <div className="my-form">
       <Actions target=".app-bar > .actions">
-        <button className="back-button ghost"
-            onClick={() => (router && router.back())}
-            aria-label="Go Back">
-          <i className="icon-arrow-left" />
-        </button>
         <button title="Disabled if the form is invalid"
             className="action"
             onClick={() => notify({
@@ -103,7 +98,128 @@ const View = props => {
             })}
             disabled={!valid}
             aria-label="Check Validity">
-          <i className={`icon icon-message-square`}></i>
+          <i className={`icon icon-zap`}></i>
+        </button>
+      </Actions>
+      <Form title={title}
+        rules={validationRules}
+        className="my-form"
+        onInit={form => {
+          const {valid, data} = form;
+          setValid(valid);
+          setData(data);
+        }}
+        onChange={form => {
+          // console.log(form);
+          const {valid, data} = form;
+          setValid(valid);
+          setData(data);
+        }}>
+        <FieldGroup className="color-chooser" label="Choose Accent Color">
+          <div className="swatches">
+            {
+              colors.map((c, i) => (
+                <div className="swatch"
+                    key={`color-${i}`}
+                    style={{backgroundColor: c[0]}}
+                    data-color={c.join("|")} 
+                    onClick={chooseColor} />
+              ))
+            }
+            <div className="swatch"
+                title="Reset colors"
+                key={`color-reset`}
+                style={{backgroundColor: "black"}}
+                onClick={resetColors} />
+          </div>
+        </FieldGroup>
+        <FieldGroup label="Personal Info" className="name-email" hint="Name &amp; email">
+          <div className="row">
+            <Field placeholder="Name" defaultValue={data.name} id="name" name="name" />
+            <Field placeholder="Email" name="email" type="email" />
+          </div>
+          {/* @ts-ignore */}
+          <Field defaultValue={"option1"} type="radio-group" name="option" options={[
+            {label: "Option 1", value: "option1"},
+            {label: "Option 2", value: "option2"}
+          ]} />
+          <Field id="subs" label="Subscribe to my newsletter" name="subscribe" type="checkbox" />
+        </FieldGroup>
+        <Field name="hobbies" 
+            placeholder="Enter multiple separated by comma"
+            type="multival"
+            label="Hobbies"
+            // disabled={true}
+            hint="Enter upto four"
+          defaultValue={["Walking", "Web Development"]} />
+        <Field name="sports" type="multiselect" label="Sports"
+          hint="Choose all that apply"
+          // disabled={true}
+          // className="horizontal"
+          defaultValue={data.sports}
+          // @ts-ignore 
+          options={[
+            {label: "Basketball", value: "basketball"},
+            {label: "Soccer", value: "soccer"},
+            {label: "Hockey (Disabled Randomly)", value: "hockey", disabled: Math.round(Math.random()) === 1}
+          ]} />
+        <Field name="files"
+          type="fileupload"
+          label="Basketball Files"
+          // @ts-ignore
+          multiple={true}
+          defaultValue={data.files}
+          disabled={data.sports && data.sports.indexOf("basketball") === -1} />
+        
+        <div className="row">
+          <button className="my-button primary" disabled={!valid} onClick={() => {
+            const json = JSON.stringify(
+              data,
+              (k, v) => {
+                if(k === "files") {
+                  return v ? v.map(f => f.name) : [];
+                }
+                return v;
+              },
+              "  "
+            );
+            notify({
+              content: () => <pre style={{
+                width: "100%",
+                fontFamily: "inherit",
+                fontSize: "0.7rem",
+                maxHeight: "350px",
+                overflowX: "auto"
+              }}>{json}</pre>,
+              type: "toast"
+            });
+          }}>
+            <i className="icon-save" /> Submit
+          </button>
+          <button className="ghost" onClick={() => (
+              router && router.back("/")
+            )}>
+            <i className="icon-home" /> Home
+          </button>
+        </div>
+      </Form>
+    </div>
+  );
+};
+MyForm.displayName = "MyForm";
+
+const View = props => {
+  const {context: {config, data: {formTitle = "Sample Form"}}} = props,
+      {router} = useRouter();
+
+
+  return (
+    <div className="view form-view">
+      <Actions target=".app-bar > .actions">
+        <button className="back-button ghost"
+            onClick={() => (router && router.back())}
+            aria-label="Go Back">
+          <i className="icon-arrow-left" />
         </button>
       </Actions>
       <div className="content">
@@ -112,108 +228,7 @@ const View = props => {
           like MultiValInput, MultiSelect and FileUpload. See
           (<code>src/components/form</code>) for these components.
         </p>
-        <Form title={formTitle}
-          rules={validationRules}
-          className="my-form"
-          onInit={form => {
-            const {valid, data} = form;
-            setValid(valid);
-            setData(data);
-          }}
-          onChange={form => {
-            // console.log(form);
-            const {valid, data} = form;
-            setValid(valid);
-            setData(data);
-          }}>
-          <FieldGroup className="color-chooser" label="Choose Accent Color">
-            <div className="swatches">
-              {
-                colors.map((c, i) => (
-                  <div className="swatch"
-                      key={`color-${i}`}
-                      style={{backgroundColor: c[0]}}
-                      data-color={c.join("|")} 
-                      onClick={chooseColor} />
-                ))
-              }
-              <div className="swatch"
-                  title="Reset colors"
-                  key={`color-reset`}
-                  style={{backgroundColor: "black"}}
-                  onClick={resetColors} />
-            </div>
-          </FieldGroup>
-          <FieldGroup label="Personal Info" className="name-email" hint="Name &amp; email">
-            <div className="row">
-              <Field placeholder="Name" defaultValue={data.name} id="name" name="name" />
-              <Field placeholder="Email" name="email" type="email" />
-            </div>
-            {/* @ts-ignore */}
-            <Field defaultValue={"option1"} type="radio-group" name="option" options={[
-              {label: "Option 1", value: "option1"},
-              {label: "Option 2", value: "option2"}
-            ]} />
-            <Field id="subs" label="Subscribe to my newsletter" name="subscribe" type="checkbox" />
-          </FieldGroup>
-          <Field name="hobbies" 
-              placeholder="Enter multiple separated by comma"
-              type="multival"
-              label="Hobbies"
-              // disabled={true}
-              hint="Enter upto four"
-            defaultValue={["Walking", "Web Development"]} />
-          <Field name="sports" type="multiselect" label="Sports"
-            hint="Choose all that apply"
-            // disabled={true}
-            // className="horizontal"
-            defaultValue={data.sports}
-            // @ts-ignore 
-            options={[
-              {label: "Basketball", value: "basketball"},
-              {label: "Soccer", value: "soccer"},
-              {label: "Hockey (Disabled Randomly)", value: "hockey", disabled: Math.round(Math.random()) === 1}
-            ]} />
-          <Field name="files"
-            type="fileupload"
-            label="Basketball Files"
-            // @ts-ignore
-            multiple={true}
-            defaultValue={data.files}
-            disabled={data.sports && data.sports.indexOf("basketball") === -1} />
-          
-          <div className="row">
-            <button className="my-button primary" disabled={!valid} onClick={() => {
-              const json = JSON.stringify(
-                data,
-                (k, v) => {
-                  if(k === "files") {
-                    return v ? v.map(f => f.name) : [];
-                  }
-                  return v;
-                },
-                "  "
-              );
-              notify({
-                content: () => <pre style={{
-                  width: "100%",
-                  fontFamily: "inherit",
-                  fontSize: "0.7rem",
-                  maxHeight: "350px",
-                  overflowX: "auto"
-                }}>{json}</pre>,
-                type: "toast"
-              });
-            }}>
-              <i className="icon-save" /> Submit
-            </button>
-            <button className="ghost" onClick={() => (
-                router && router.back("/")
-              )}>
-              <i className="icon-home" /> Home
-            </button>
-          </div>
-        </Form>
+        <MyForm title={formTitle} />
       </div>
     </div>
   );

@@ -47,7 +47,7 @@ export default [
   {
     path: "/landing{\\?:query}",
     controller: async (context) => {
-      const {route: {params}} = context,
+      const {route: {action, params}} = context,
           {query = ""} = params,
           queryParams = new URLSearchParams(query);
 
