@@ -4,7 +4,7 @@ import {useRouter} from "@components/router";
 import Actions from "@components/actionbar/Actions";
 import Overlay from "@components/overlay/Overlay";
 import {useNotifications} from "@components/notifications";
-import {useGlobalKeyListener} from "@components/util/hooks";
+import {useGlobalKeyListener, useOnMount} from "@components/util/hooks";
 import Config from "@config";
 
 function random(max, min = 0) {
@@ -55,7 +55,7 @@ function useEscapeClose(show, onCancel) {
 */
 
 const View = props => {
-  const {context} = props, 
+  const {context: {data, config}} = props, 
       notify = useNotifications(),
       {router} = useRouter(), 
       toggleScheme = useCallback(() => {
@@ -77,6 +77,12 @@ const View = props => {
 
   // useEscapeClose(showOverlay, () => setShowOverlay(false));
   useGlobalKeyListener(showOverlay, "Escape", () => setShowOverlay(false));
+
+  useOnMount(() => {
+    if(data.queryParams.size) {
+      notify.info(data.queryParams.toString());
+    }
+  });
 
   // @ts-ignore
   // console.debug("Router", router.getCurrentRoute().params);
