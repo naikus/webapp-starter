@@ -6,7 +6,7 @@ const View = props => {
   const {context: {config, data = {}}} = props,
       {route, router} = useRouter(),
       goBack = useCallback(() => {
-        if(!route.from.runtimePath) {
+        if(!route.from) {
           // This view was loaded from the browser directly (not navigated through app)
           router.route("/");
         }else {

@@ -15,6 +15,9 @@ const FocusGuard = (props) => {
   const fcGuard = useRef(null),
       shiftKey = useRef(false),
       focusFirstElem = () => {
+        if(!fcGuard.current) {
+          return;
+        }
         const contextElem = fcGuard.current,
             // @ts-ignore
             elems = contextElem.querySelectorAll(FOCUSABLE_ELEMS);
