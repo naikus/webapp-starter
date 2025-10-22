@@ -207,13 +207,16 @@ function App({appBarPosition = "left"}) {
   /** @type {import("react").MutableRefObject<Router|undefined>} */
   const [router, setRouter] = useState(null),
       /** @type {[RouteControllerData, (state: RouteControllerData) => void]} */
-      [routeContext = {
+      [routeContext, setRouteContext] = useState({
         config: {appBar: false}
-      }, setRouteContext] = useState(),
-      {component: View, config = {}, route, data} = routeContext,
+      }),
+      {config = {}, route, data} = routeContext,
+      [View, setView] = useState(),
+
       {appBar = true} = config,
       transitionRef = useRef(null),
       transitionKey = route ? route.path : "root",
+      
       /** @type {NotifyFunction} */
       notify = useNotifications();
 
@@ -242,7 +245,7 @@ function App({appBarPosition = "left"}) {
             // notify.toast(`Setting route ${context.route.runtimePath}`);
             /** @type {RouteControllerData} */
             const context = event.detail,
-                {component /*, config = {}, data */} = context;
+                {route, component /*, config = {}, data */} = context;
             /*
             let {requiresAuth} = config, authEnabled = true;
             if(authEnabled && requiresAuth) {
@@ -262,9 +265,13 @@ function App({appBarPosition = "left"}) {
             */
 
             if(component) {
-              // console.debug("Creating wrapper", component.displayName);
-              // A wrapper needs to be created every time as views are not cached
-              context.component = createViewWrapper(context.component);
+              const {from = {}} = route;
+              // Set the View only of the routes are different
+              if(from.routePath !== route.routePath) {
+                // console.debug("Creating wrapper", component.displayName);
+                // A wrapper needs to be created every time as views are not cached
+                setView(createViewWrapper(component));
+              }
             }
             setRouteContext(context);
           }),
