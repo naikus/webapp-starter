@@ -19,6 +19,7 @@ const Api = createApiClient({
 /**
  * @typedef {import("simple-router").Router} Router
  * @typedef {import("simple-router").RouteDefn} RouteDefn
+ * @typedef {import("simple-router").Route} Route
  */
 
 /**
@@ -51,7 +52,6 @@ export default [
           {query = ""} = params,
           queryParams = new URLSearchParams(query);
 
-      // console.log(queryParams.toString());
       const LandingView = (await import("./modules/LandingView")).default;
       return {
         // forward: "/route-error",

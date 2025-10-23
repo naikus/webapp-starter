@@ -14,6 +14,7 @@ import routes from "./routes";
 /**
  * @typedef {import("simple-router").Router} Router
  * @typedef {import("simple-router").RouteInfo} RouteInfo
+ * @typedef {import("simple-router").RouteContext} RouteContext
  * @typedef {import("simple-router").create} createRouter 
  * @typedef {import("./components/notifications/index").NotifyFunction} NotifyFunction
  * @typedef {import("./routes").RouteControllerData} RouteControllerData
@@ -204,7 +205,7 @@ RouteLoadingIndicator.displayName = "RouteLoadingIndicator";
  * }} props 
  */
 function App({appBarPosition = "left"}) {
-  /** @type {import("react").MutableRefObject<Router|undefined>} */
+  /** @type {[Router, function(Router)]} */
   const [router, setRouter] = useState(null),
       /** @type {[RouteControllerData, (state: RouteControllerData) => void]} */
       [routeContext, setRouteContext] = useState({
@@ -215,7 +216,7 @@ function App({appBarPosition = "left"}) {
 
       {appBar = true} = config,
       transitionRef = useRef(null),
-      transitionKey = route ? route.path : "root",
+      transitionKey = route ? route.routePath : "root",
       
       /** @type {NotifyFunction} */
       notify = useNotifications();
@@ -243,7 +244,7 @@ function App({appBarPosition = "left"}) {
           router.on("route", event => {
             // console.log("Setting route", context);
             // notify.toast(`Setting route ${context.route.runtimePath}`);
-            /** @type {RouteControllerData} */
+            /** @type {RouteContext} */
             const context = event.detail,
                 {route, component /*, config = {}, data */} = context;
             /*
