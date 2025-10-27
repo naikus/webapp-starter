@@ -8,8 +8,8 @@
   // box-shadow: 0 0px 10px rgba(0,0,0,0.04);
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   display: flex;
-  justify-content: space-between;
-  align-items: stretch;
+  // justify-content: space-between;
+  // align-items: stretch;
   position: fixed;
   top: 0;
   left: 0;
@@ -30,46 +30,46 @@
     .action-group {
       display: flex;
     }
+  }
 
-    .action, button {
-      text-decoration: none;
-      cursor: pointer;
-      width: auto;
-      display: flex;
-      padding: @base-unit + 4;
-      margin: 0;
-      border-radius: 0;
-      box-shadow: none;
-      border: none;
-      // padding: @base-unit @base-unit @base-unit - 3;
+  .action, button {
+    text-decoration: none;
+    cursor: pointer;
+    width: auto;
+    display: flex;
+    padding: @base-unit + 4;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    // padding: @base-unit @base-unit @base-unit - 3;
+    background-color: transparent;
+    border-radius: @input-border-radius;
+    color: var(--text-color);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
       background-color: transparent;
-      border-radius: @input-border-radius;
-      color: var(--text-color);
+      color: var(--accent-color);
+    }
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    &:focus {
+      background-color: var(--active-bg-color);
+      outline: 0;
+    }
 
-      &:hover {
-        // background-color: rgba(0,0,0,0.03);
-        color: var(--accent-color);
-      }
+    &[disabled]:hover {
+      cursor: not-allowed;
+      // background-color: transparent;
+      color: var(--input-text-color);
+    }
 
-      &:focus {
-        background-color: var(--active-bg-color);
-        outline: 0;
-      }
-
-      &[disabled]:hover {
-        cursor: not-allowed;
-        // background-color: transparent;
-        color: var(--input-text-color);
-      }
-
-      .icon {
-        margin: 0;
-        font-size: 1.3em;
-      }
+    .icon {
+      margin: 0;
+      font-size: 1.3em;
     }
   }
 }
