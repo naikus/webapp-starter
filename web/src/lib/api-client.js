@@ -277,9 +277,9 @@ async function responseAsJson(response) {
       response.json().then(json => {
         const err = new Error(json.message);
         // @ts-ignore
-        err.code = json.code || json.statusCode;
+        err.status = json.code || response.status;
         // @ts-ignore
-        err.status = response.status;
+        err.statusText = response.statusText;
         reject(err);
       }).catch(error => {
         return response.text().then(text => {

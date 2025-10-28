@@ -46,7 +46,7 @@ export default [
   // Example of loading a view and it's dependencies lazily
   // Also how to pass query parameters e.g. "/landing?hello=world&world=hello"
   {
-    path: "/landing{\\?:query}",
+    path: "/landing{\\?*query}",
     controller: async (context) => {
       const {route: {action, params}} = context,
           {query = ""} = params,
