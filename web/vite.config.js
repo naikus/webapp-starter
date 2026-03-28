@@ -3,7 +3,7 @@
 /* global process */
 import {resolve} from "path";
 import {defineConfig} from "vite";
-import react from "@vitejs/plugin-react-swc";
+import react from "@vitejs/plugin-react";
 import legacy from "@vitejs/plugin-legacy";
 // Enable for https. See also: plugins section below
 // import basicSSL from "@vitejs/plugin-basic-ssl";
