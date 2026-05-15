@@ -30,11 +30,12 @@ module.exports = {
             // Other external API servers that UI contacts directly
             // `https://${env.API_SERVER}`,
             // `wss://${env.API_SERVER}`,
-            "http://localhost:8000",
-            "https://localhost:8000"
+            "https://localhost:8000",
+            "http://localhost:8000"
           ],
-          "script-src": ["'self'", "'unsafe-inline'"],
-          "style-src":  ["'self'", "'unsafe-inline'"],
+          "script-src": ["'self'", "'unsafe-inline'", "data:"],
+          // "script-src-attr": ["'unsafe-inline'"], // for custom google fonts
+          "style-src":  ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
           "font-src":   ["'self'", "https://fonts.gstatic.com"],
           "media-src":  ["*"],
           "img-src":  ["*"],
