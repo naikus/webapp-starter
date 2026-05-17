@@ -1,5 +1,5 @@
 @import "@less/vars.less";
-@import "@less/base.less";
+// @import "@less/base.less";
 
 .form-view {
   .content {
@@ -8,19 +8,16 @@
     justify-content: center;
     padding-top: 20px;
     position: relative;
-    // align-items: center;
   }
 
   .name-email {
-    .field-group-content {
-      .row {
-        padding: 0;
-        display: flex;
-        flex-direction: row;
-        input {
-          width: 120px;
-          margin-right: 4px;
-        }
+    .row {
+      padding: 0;
+      display: flex;
+      flex-direction: row;
+      input {
+        width: 120px;
+        margin-right: 4px;
       }
     }
   }
@@ -30,24 +27,29 @@
     // padding: @padding-smaller;
     border-radius: @base-border-radius * 2;
 
-    .color-chooser > .field-group-content {
+    > .field-container, .field-group {
+      background-color: var(--base-color);
+      // border: 2px solid color-mix(in srgb, var(--accent-color) 35%, transparent 40%);
+      margin: 12px 0;
+    }
+
+    > .color-chooser {
       display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
+      flex-direction: column;
+      border: 1px dashed color-mix(in srgb, var(--accent-color) 35%, transparent 40%);
+      .swatches {
+        display: flex;
+      }
       // justify-content: center;
       .swatch {
         cursor: pointer;
-        width: 40px;
-        height: 40px;
+        width: 30px;
+        height: 30px;
         border-radius: 50%;
-        margin: 6px;
+        margin-right: 6px;
       }
     }
 
-    > .field-container, .field-group {
-      background-color: var(--base-color);
-      margin: 12px 0;
-    }
     .fu-content {
       > .files {
         max-height: 200px;
@@ -65,7 +67,7 @@
     margin: 0px;
     margin-bottom: 24px;
     background-color: color-mix(in srgb, var(--accent-color) 15%, var(--base-color) 40%);
-    border-radius: 8px;
+    border-radius: @base-border-radius;
     /* font-size: .9em; */
   }
 }

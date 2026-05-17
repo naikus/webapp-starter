@@ -4,6 +4,7 @@
 // /*
 .progress.global {
   position: absolute;
+  background-color: rgba(0, 0, 0, 0.03);
   // top: @appbar-height;
   height: 4px;
   > .progress-track {
@@ -13,6 +14,9 @@
 // */
 .app-bar {
   height: @appbar-height;
+  display: flex;
+  align-items: center;
+  background-color: var(--base-color);
   .branding {
     flex: 1;
     padding: 0 @padding-default;
@@ -38,10 +42,18 @@
     padding-right: @padding-smaller;
   }
 
-  .actions {
-    .action {
-      min-width: 45px;
-      min-height: 45px;
+  &.actionbar {
+    .actions {
+      /*
+      .action {
+        min-width: 45px;
+        min-height: 45px;
+      }
+      .about-action {
+        background-color: rgb(231, 47, 78);
+        color: #fff;
+      }
+      */
     }
   }
 }
@@ -77,11 +89,11 @@
 
     .actions, .action-group {
       flex-direction: column;
-      flex: 2;
+      // flex: 2;
     }
 
     .global-actions {
-      // flex: 1;
+      flex: 2;
       display: flex;
       justify-content: flex-end;
       // flex-direction: column-reverse;
@@ -219,14 +231,14 @@
     // background-color: rgba(0,0,0,0.05);
     border-radius: @base-border-radius @base-border-radius 0 0;
     > h4, > p {
-      margin: @base-unit 0;
+      margin: @padding-tiny 0;
     }
     .icon {
       margin-right: @base-unit;
     }
   }
   > .content {
-    padding: 0 @padding-container + 4px @padding-container;
+    padding: 0 @padding-container @padding-container;
     flex: 3;
     // min-height: 100px;
   }
@@ -244,13 +256,34 @@
     }
   }
 }
+@media (prefers-color-scheme: dark) {
+  .alert {
+    > .actions {
+      background-color: rgba(0,0,0,0.16);
+    }
+  }
+}
 :root[data-theme="dark"] {
   .alert {
+    /*
     > .title {
       // background-color: rgba(255,255,255,0.05);
     }
+    */
     > .actions {
       background-color: rgba(0,0,0,0.16);
+    }
+  }
+}
+:root[data-theme="light"] {
+  .alert {
+    /*
+    > .title {
+      // background-color: rgba(255,255,255,0.05);
+    }
+    */
+    > .actions {
+      background-color: rgba(0,0,0,0.05);
     }
   }
 }

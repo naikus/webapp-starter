@@ -46,6 +46,10 @@ function createNotificationService() {
   return {
     onCurrent: cb => {
       handler = cb;
+      // If there's a current message, show it!
+      if(current) {
+        handler(current);
+      }
       return () => {
         handler = null;
       };

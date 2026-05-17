@@ -3,7 +3,7 @@
 
 // form controls
 @form-component-border-radius: @input-border-radius;
-@form-component-padding: @padding-default;
+@form-component-padding: @padding-smaller;
 
 :root {
 
@@ -76,7 +76,7 @@ textarea {
   min-height: 100px;
 }
 .button, input[type=button], button, input[type=reset], input[type=submit] {
-  padding: @form-component-padding + 2px @form-component-padding @form-component-padding - 2px;
+  padding: @form-component-padding;
   background-color: var(--button-bg-color);
   opacity: 0.9;
   color: var(--button-text-color);
@@ -86,6 +86,16 @@ textarea {
   cursor: pointer;
   text-align: center;
   ._no-select;
+
+  &.ghost {
+    background-color: transparent; // var(--bg-color);
+    border-color: transparent;
+    &:hover, &:focus {
+      background-color: var(--button-bg-color);
+      border-color: transparent;
+      box-shadow: none;
+    }
+  }
 
   &:hover {
     // background-color: darken(@button-bg-color, 5%);

@@ -2,7 +2,7 @@
  * @typedef {import("pino").Logger} Logger
  */
 
-const {pino} = require("pino"),
+const pino = require("pino"),
     config = require("../config"),
     logger = pino(config.logger);
 

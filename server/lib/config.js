@@ -1,10 +1,16 @@
 /** @typedef {import("./types").Config} Config */
 
 const // os = require("os"),
-    {env} = process;
+    pkg = require("../package.json"),
+    {env} = process,
+    knexfile = require("../db/knexfile"),
+    knexConfig = knexfile[env.NODE_ENV || "development"];
 
 /** @type {Config} */
 module.exports = {
+  version: pkg.version,
+  description: pkg.description,
+
   webserver: {
     host: env.HOST || "0.0.0.0",
     port: env.PORT || 8000,
@@ -24,10 +30,12 @@ module.exports = {
             // Other external API servers that UI contacts directly
             // `https://${env.API_SERVER}`,
             // `wss://${env.API_SERVER}`,
-            "http://localhost:8080"
+            "https://localhost:8000",
+            "http://localhost:8000"
           ],
-          "script-src": ["'self'", "'unsafe-inline'"],
-          "style-src":  ["'self'", "'unsafe-inline'"],
+          "script-src": ["'self'", "'unsafe-inline'", "data:"],
+          // "script-src-attr": ["'unsafe-inline'"], // for custom google fonts
+          "style-src":  ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
           "font-src":   ["'self'", "https://fonts.gstatic.com"],
           "media-src":  ["*"],
           "img-src":  ["*"],
@@ -40,6 +48,12 @@ module.exports = {
       crossOriginOpenerPolicy: false
       // contentSecurityPolicy: false
     }
+    /*
+    cors: {
+      origin: env.CORS_ORIGIN || "*",
+      credentials: env.CORS_CREDENTIALS === "true"
+    }
+    */
   },
 
   webapp: {
@@ -48,8 +62,13 @@ module.exports = {
     // staticPath: null, // API and webapp are deployed separately
     auth: {
       type: process.env.AUTH_TYPE || "none"
+      // Required for secure session for auth.type == "userpass"
+      // ,sessionKey: Buffer.from(process.env.SESSION_KEY || "cafebabe".repeat(8), "hex")
     }
   },
+
+  /** @type {import("knex/types").knex.Knex.Config} */
+  persistence: knexConfig,
 
   logger: {
     targets: [

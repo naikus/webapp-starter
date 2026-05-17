@@ -1,6 +1,12 @@
 // import AboutView from "./modules/AboutView";
 // import LandingView from "./modules/LandingView";
 // import FormView from "./modules/FormView";
+import createApiClient, {responseAsJson} from "./lib/api-client";
+import Config from "./config";
+
+const Api = createApiClient({
+  apiUrl: Config.apiServer
+});
 
 /**
  * @typedef RouteControllerData
@@ -13,6 +19,7 @@
 /**
  * @typedef {import("simple-router").Router} Router
  * @typedef {import("simple-router").RouteDefn} RouteDefn
+ * @typedef {import("simple-router").Route} Route
  */
 
 /**
@@ -39,13 +46,12 @@ export default [
   // Example of loading a view and it's dependencies lazily
   // Also how to pass query parameters e.g. "/landing?hello=world&world=hello"
   {
-    path: "/landing{\\?:query}",
+    path: "/landing{\\?*query}",
     controller: async (context) => {
-      const {route: {params}} = context,
+      const {route: {action, params}} = context,
           {query = ""} = params,
           queryParams = new URLSearchParams(query);
 
-      // console.log(queryParams.toString());
       const LandingView = (await import("./modules/LandingView")).default;
       return {
         // forward: "/route-error",
@@ -78,16 +84,35 @@ export default [
     controller: async () => {
       const AboutView = (await import("./modules/AboutView")).default;
 
+      let aboutInfo;
+      try {
+        const aboutRes = await Api.get("/about");
+        aboutInfo = await responseAsJson(aboutRes);
+      }catch (e) {
+        aboutInfo = {
+          error: e
+        };
+      }
+      return {
+        component: AboutView,
+        data: aboutInfo,
+        config: {
+          appBar: false
+        }
+      };
+      /*
       return new Promise((res, rej) => {
         setTimeout(() => {
           res({
             component: AboutView,
+            data: aboutInfo,
             config: {
               appBar: false
             }
           });
         }, 1000);
       });
+      */
     }
   }
 ];

@@ -1,9 +1,10 @@
 /* global */
-import React, {useCallback, useEffect, useState, useRef} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {useRouter} from "@components/router";
 import Actions from "@components/actionbar/Actions";
 import Overlay from "@components/overlay/Overlay";
 import {useNotifications} from "@components/notifications";
+import {useGlobalKeyListener} from "@components/util/hooks";
 import Config from "@config";
 
 function random(max, min = 0) {
@@ -19,6 +20,7 @@ const nTypes = ["success", "info", "warn", "error", "toast"];
  * @param {boolean} show 
  * @param {Function} onCancel 
  */
+/*
 function useEscapeClose(show, onCancel) {
   const wasShown = useRef(false),
       close = useCallback(e => {
@@ -50,12 +52,12 @@ function useEscapeClose(show, onCancel) {
     }
   }, [show]);
 }
-
+*/
 
 const View = props => {
-  const {context} = props, 
+  const {context: {data, config}} = props, 
       notify = useNotifications(),
-      router = useRouter(), 
+      {router} = useRouter(), 
       toggleScheme = useCallback(() => {
         /** @type {HTMLElement} */
         // @ts-ignore
@@ -73,10 +75,17 @@ const View = props => {
       }, []),
       [showOverlay, setShowOverlay] = useState(false);
 
-  useEscapeClose(showOverlay, () => setShowOverlay(false));
+  // useEscapeClose(showOverlay, () => setShowOverlay(false));
+  useGlobalKeyListener(showOverlay, "Escape", () => setShowOverlay(false));
+
+  useEffect(() => {
+    if(data.queryParams.size) {
+      notify.info(data.queryParams.toString());
+    }
+  }, [data]);
 
   // @ts-ignore
-  console.debug("Router", router.getCurrentRoute().params);
+  // console.debug("Router", router.getCurrentRoute().params);
   // console.debug("Context", context.queryParams.get("hello"));
   return (
     <div className="view landing-view">

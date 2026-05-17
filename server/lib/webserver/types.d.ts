@@ -1,4 +1,5 @@
-import {FastifyInstance} from "fastify";
+import {FastifyInstance, FastifyRequest, FastifyReply, DoneFuncWithErrOrRes} from "fastify";
+import { ApplicationHook, LifecycleHook } from "fastify/types/hooks";
 
 export interface Webapp {
   /** The fastify instance */
@@ -11,4 +12,7 @@ export interface Webapp {
    * @param {RegOpts} options The options to register the api
    */
   registerApi(apiReg: (api: FastifyInstance, options: any) => void, options: any);
+
+  addApiHook(step: ApplicationHook|LifecycleHook, hook: (req: FastifyRequest, reply: FastifyReply, done: DoneFuncWithErrOrRes) => void);
+  addApiHook(step: ApplicationHook|LifecycleHook, hook: (req: FastifyRequest, reply: FastifyReply) => void);
 }

@@ -13,11 +13,14 @@ import "./styles.less";
  */
 const Actions = props => {
   const {target, className = ""} = props,
-      element = useRef(document.createElement("div")),
-      {current} = element;
+      element = useRef(document.createElement("div"));
 
   useEffect(function mountActionsOnTarget() {
-    const targetElem = document.querySelector(`${target}`);
+    const targetElem = document.querySelector(`${target}`),
+        {current} = element;
+        
+    current.className = `action-group ${className}`;
+
     if(!targetElem) {
       throw new Error(`target element ${target} not found`);
     }
@@ -30,8 +33,7 @@ const Actions = props => {
     };
   }, []);
 
-  current.className = `action-group ${className}`;
-  return createPortal(props.children, current);
+  return createPortal(props.children, element.current);
 };
 Actions.displayName = "Actions";
 Actions.propTypes = {

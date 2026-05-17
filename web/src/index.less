@@ -4,6 +4,13 @@
 @import "less/html-controls.less";
 @import "assets/font/feather/style.less";
 
+:root {
+  // font-family: "Monospace";
+  // font-size: 0.9em;
+
+  /* Configured in vite.config.js */
+  --branding: @branding;
+}
 
 #root {
   position: absolute;
@@ -13,7 +20,7 @@
   // min-height: 100%;
   height: 100%;
   overflow: hidden;
-  color-scheme: dark;
+  color-scheme: normal;
 }
 
 @import "branding/@{branding}/less/index.less";

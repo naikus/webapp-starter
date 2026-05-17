@@ -1,11 +1,12 @@
 // @ts-nocheck
 /* global __dirname */
 /* global process */
-import { resolve } from "path";
-import { defineConfig} from "vite";
-import react from "@vitejs/plugin-react-swc";
+import {resolve} from "path";
+import {defineConfig} from "vite";
+import react from "@vitejs/plugin-react";
 import legacy from "@vitejs/plugin-legacy";
-import basicSSL from "@vitejs/plugin-basic-ssl";
+// Enable for https. See also: plugins section below
+// import basicSSL from "@vitejs/plugin-basic-ssl";
 
 // https://vitejs.dev/config/
 const APP_BRANDING = process.env.APP_BRANDING || "default";
@@ -47,10 +48,30 @@ export default defineConfig({
     }
   },
   plugins: [
+    /*
     basicSSL({
       certDir: "../server/certs"
     }),
-    react(),
+    */
+    react({
+      /*
+      babel: {
+        plugins: [
+          ["babel-plugin-react-compiler", {
+            target: "18",
+              logger: {
+                logEvent(filename, event) {
+                  if (event.kind === 'CompileError') {
+                    // console.log('Compiled:', filename);
+                    console.log("Logged", event, filename);
+                  }
+                }
+              }
+          }]
+        ]
+      }
+      */
+    }),
     legacy({
       targets: ["defaults", "IE 11"]
     })

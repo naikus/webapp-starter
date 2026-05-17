@@ -12,5 +12,8 @@
     "build": "sh ./build-app.sh",
     "clean": "rm -rf ./dist",
     "refresh": "rm -rf ./dist ./node_modules"
+  },
+  "devDependencies": {
+    "eslint": "^9.11.1"
   }
 }

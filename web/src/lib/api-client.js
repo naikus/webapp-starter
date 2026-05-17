@@ -161,6 +161,11 @@ const ObjectToString = Object.prototype.toString,
           delete options.headers["Content-Type"];
           delete options.headers["content-type"];
         }
+
+        if("credentials" in this.options) {
+          options.credentials = this.options.credentials;
+        }
+
         const request = new Request(url, options), context = {path, options, request, response: null};
 
         let promise = Promise.resolve();
@@ -272,9 +277,9 @@ async function responseAsJson(response) {
       response.json().then(json => {
         const err = new Error(json.message);
         // @ts-ignore
-        err.code = json.code || json.statusCode;
+        err.status = json.code || response.status;
         // @ts-ignore
-        err.status = response.status;
+        err.statusText = response.statusText;
         reject(err);
       }).catch(error => {
         return response.text().then(text => {

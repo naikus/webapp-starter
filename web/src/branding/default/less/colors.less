@@ -6,29 +6,15 @@
   @info-color: rgb(70, 142, 201);
   @error-color: rgb(215, 82, 82);
 
-  @accent-color: rgb(0, 173, 181);
+  @accent-color: rgb(1, 133, 139);
   @accent-text-color: rgb(255, 255, 255);
-  @base-color: rgb(255, 255, 255);
-  @bg-color: rgb(250, 250, 250);
+  @base-color: rgb(255, 253, 253);
+  @bg-color: rgb(244, 244, 244);
   @alt-bg-color: rgb(255, 255, 255); // #314458; // #d4e3e0;
   @text-color: rgb(61, 67, 83);
   @alt-text-color: rgb(38, 41, 47);
   @selection-bg-color: fadeout(@accent-color, 20%);
   @selection-text-color: @accent-text-color;
-
-  /*
-  @accent-color: #cd3652;
-  @accent-text-color: #fff;
-  @base-color: #dfdfdf;
-  @bg-color: #d8d7dc;
-  @alt-bg-color: #11252c; // #314458; // #d4e3e0;
-  @text-color: #242527;
-  @alt-text-color: #dff1f5;
-  */
-
-  // @selection-bg-color: fade(@accent-color, 70%);
-  // @selection-text-color: rgb(255, 255, 255);
-  // @selected-bg-color:rgba(0,0,0,0.06);
 
   @active-bg-color: rgba(0,0,0,0.06);
   @active-text-color: @text-color;
@@ -40,7 +26,7 @@
   @input-text-color: @text-color;
   @input-hint-color: desaturate(lighten(@text-color, 15%), 10%);
   @input-label-color: @text-color;
-  @button-bg-color: darken(@base-color, 12%);
+  @button-bg-color: darken(@bg-color, 12%);
   @button-text-color: @text-color;
 
   @notification-bg-color: @alt-text-color;
@@ -59,6 +45,24 @@
   @base-color: rgb(23, 28, 37);
   @bg-color: rgb(31, 37, 49);
   @alt-bg-color: lighten(@bg-color, 5%);
+
+  /*
+  // Tokyo night theme
+  @success-color: #ace271;
+  @warn-color: #edb86b;
+  @info-color: #2ac6e2;
+  @error-color: #f4748c;
+
+  // @accent-color: rgb(153, 119, 224);
+  // @accent-color: #cd4736;
+  // @accent-color: rgb(29, 130, 148);
+  @accent-color: rgb(9, 129, 145);
+  @accent-text-color: rgb(255, 255, 255);
+  @base-color: rgb(22, 22, 31);
+  @bg-color: rgb(26, 27, 39);
+  @alt-bg-color: lighten(@bg-color, 5%);
+  */
+
 
   @text-color: rgb(238, 238, 238);
   @alt-text-color: rgb(232, 228, 228);
@@ -81,7 +85,6 @@
 
   @notification-bg-color: darken(@base-color, 2%);
   @notification-text-color: @text-color;
-
 }
 
 .vars() {

@@ -1,5 +1,5 @@
 {
-  "name": "react-starter-new",
+  "name": "webapp-starter-ui",
   "private": true,
   "version": "0.0.1",
   "type": "module",
@@ -14,20 +14,20 @@
     "react": "~18.2.0",
     "react-dom": "~18.2.0",
     "react-transition-group": "~4.4.5",
-    "simple-router": "git+https://github.com/naikus/simple-router.git",
+    "simple-router": "github:naikus/simple-router",
     "store2": "~2.14.2"
   },
   "devDependencies": {
     "@tsconfig/vite-react": "~3.4.0",
     "@types/react": "~18.0.28",
     "@types/react-dom": "~18.0.11",
-    "@vitejs/plugin-basic-ssl": "^1.2.0",
-    "@vitejs/plugin-legacy": "^6.0.0",
-    "@vitejs/plugin-react-swc": "^3.7.2",
-    "eslint": "^9.11.1",
-    "eslint-plugin-react": "^7.37.0",
-    "eslint-plugin-react-compiler": "^0.0.0-experimental-3cbe879-20240808",
+    "@vitejs/plugin-basic-ssl": "~2.3.0",
+    "@vitejs/plugin-legacy": "^8.0.1",
+    "@vitejs/plugin-react": "^6.0.1",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-compiler": "^19.1.0-rc.2",
     "less": "^4.1.3",
-    "vite": "^6.0.1"
+    "vite": "^8.0.3"
   }
 }

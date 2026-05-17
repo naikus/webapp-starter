@@ -7,7 +7,8 @@ const config = {
   appName: import.meta.env.APP_NAME || "React Starter",
   appVersion: version,
   appNs: import.meta.env.APP_NS || "reactstarter",
-  apiServerUrl: import.meta.env.APP_API_SERVER_URL || "http://localhost:7001/api",
+  apiServer: import.meta.env.APP_API_SERVER || "http://localhost:7001",
+  apiBasePath: import.meta.env.APP_API_BASE_PATH || "/api",
   branding: import.meta.env.APP_BRANDING,
   ...BrandConfig
 };

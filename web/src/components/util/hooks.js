@@ -1,4 +1,4 @@
-import {useRef, useState, useEffect} from "react";
+import {useRef, useState, useEffect, useCallback} from "react";
 
 /**
  * @typedef {import("react").SetStateAction<Error|null|undefined>} SetErrorAction
@@ -13,7 +13,7 @@ function useOnMount(callback) {
       ref.current = callback() || (() => {});
     }
     /**
-     * This is intntionally not returning a cleanup function the first time. We don't
+     * This is intentionally not returning a cleanup function the first time. We don't
      * want that. The cleanup function will only be returned on subsequent call. (i.e.
      * when the component is unmounted)
      */
@@ -51,7 +51,7 @@ function useAsyncCallImmediate(asyncCall, ...args) {
           return;
         }
         ref.current = true;
-        // setBusy(true);
+        // setBusy(true); the default setBusy state is true
         try {
           const res = await asyncCall(...args);
           setResult(res);
@@ -93,10 +93,41 @@ function useEffectOnce(fn, deps = []) {
   }, deps);
 }
 
+function useGlobalKeyListener(when, key, callback) {
+  const registered = useRef(false),
+      listener = useCallback((e) => {
+        if(e.key === key) {
+          window.requestAnimationFrame(callback);
+        }
+      }, []);
+
+  useEffect(() => {
+    if(when) {
+      // console.debug("Added event listener");
+      document.addEventListener("keyup", listener, true);
+      registered.current = true;
+    }else {
+      if(registered.current) {
+        // console.debug("Removed event listener");
+        document.removeEventListener("keyup", listener, true);
+      }
+    }
+
+    return () => {
+      if(registered.current) {
+        // console.debug("Unregistered, removed key listener");
+        registered.current = false;
+        document.removeEventListener("keyup", listener, true);
+      }
+    };
+  }, [when, key]);
+}
+
 
 export {
   useEffectOnce,
   useOnMount,
   useAsyncCall,
-  useAsyncCallImmediate
+  useAsyncCallImmediate,
+  useGlobalKeyListener
 };

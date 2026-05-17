@@ -28,12 +28,13 @@ RUN mkdir -p /opt/webapp-starter \
 WORKDIR /opt/webapp-starter
 # Copy binary and starter script
 COPY --chown=appuser:appuser dist/run-exec.sh    ./run-exec.sh
-COPY --chown=appuser:appuser dist/run.sh         ./run.sh
+# COPY --chown=appuser:appuser dist/run.sh         ./run.sh
 COPY --chown=appuser:appuser dist/lib            ./lib
+COPY --chown=appuser:appuser dist/db             ./db
 COPY --chown=appuser:appuser dist/public         ./public
 COPY --chown=appuser:appuser dist/package.json   ./package.json
 
-RUN chmod +x ./run.sh
+# RUN chmod +x ./run.sh
 RUN chmod +x ./run-exec.sh
 
 # Install git

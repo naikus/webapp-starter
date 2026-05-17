@@ -2,7 +2,7 @@
 
 # Server
 export HOST=${HOST:-0.0.0.0}
-export PORT=${PORT:-5050}
+export PORT=${PORT:-8000}
 # SSL_KEY_PATH=
 # SSL_CERT_PATH=
 export LOG_LEVEL=${LOG_LEVEL:-info}
