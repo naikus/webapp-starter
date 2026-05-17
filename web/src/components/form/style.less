@@ -430,7 +430,6 @@ form {
   flex-direction: column;
   justify-content: end;
   padding: 0;
-  border-radius: @input-border-radius;
   background-color: var(--input-bg-color);
   color: var(--input-text-color);
 
@@ -468,6 +467,13 @@ form {
       &.selected {
         background-color: var(--selection-bg-color);
       }
+    }
+
+    &:first-child {
+      border-radius: @input-border-radius @input-border-radius 0 0;
+    }
+    &:last-child {
+      border-radius: 0 0 @input-border-radius @input-border-radius;
     }
   }
 

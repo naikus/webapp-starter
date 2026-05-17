@@ -85,25 +85,29 @@ function MultiSelect(props) {
         selected = data.some(item => comparator(item, option));
 
     return (
-      <div key={`${value}_${index}`}
+      <li key={`${value}_${index}`}
           tabIndex={index + 1}
           data-value={value}
           onClick={toggleSelectItem}
           onKeyUp={toggleSelectItem}
           className={`multi-select-item${selected ? " selected" : ""}`}
+          role="listitem"
           // @ts-ignore
           disabled={disabled}>
         {option.label}
-      </div>
+      </li>
     );
   });
 
   return (
-    <div tabIndex={0} ref={listElemRef}
+    <ul tabIndex={0} 
+        ref={listElemRef}
         data-name={name}
+        role="listbox"
+        aria-multiselectable="true"
         className={`select multi-select ${disabled ? " disabled": ""} ${className}`}>
       {items}
-    </div>
+    </ul>
   );
 }
 MultiSelect.displayName = "MultiSelect";
