@@ -2,10 +2,11 @@
 
 /** @typedef {import("@components/form/rule-builder").ValidationRule} ValidationRule */
 
-import React, {useState} from "react";
+import React, {useCallback, useState} from "react";
 import PropTypes from "prop-types";
 import {useRouter} from "@components/router";
 import Actions from "@components/actionbar/Actions";
+import Tabs from "@components/tabs/Tabs";
 import {useNotifications} from "@components/notifications";
 import {
   Form,
@@ -223,12 +224,23 @@ const View = props => {
         </button>
       </Actions>
       <div className="content">
-        <p className="message">
-          Below is an example of the form with support for custom components 
-          like MultiValInput, MultiSelect and FileUpload. See
-          (<code>src/components/form</code>) for these components.
-        </p>
-        <MyForm title={formTitle} />
+        <Tabs>
+          <Tabs.Nav activeTab="messages" 
+              onChange={(curr, prev) => {console.log(`Tab change ${prev} -> ${curr}`)}}>
+            <Tabs.NavItem target="messages">Messages</Tabs.NavItem>
+            <Tabs.NavItem target="form">Form</Tabs.NavItem>
+          </Tabs.Nav>
+          <Tabs.Content name="messages">
+            <p className="message">
+              Here is an example of the form with support for custom components 
+              like MultiValInput, MultiSelect and FileUpload. See
+              (<code>src/components/form</code>) for these components.
+            </p>
+          </Tabs.Content>
+          <Tabs.Content name="form">
+            <MyForm title={formTitle} />
+          </Tabs.Content>
+        </Tabs>
       </div>
     </div>
   );

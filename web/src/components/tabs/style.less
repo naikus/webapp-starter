@@ -1,0 +1,114 @@
+@import "@less/vars.less";
+@import "@less/css-helpers.less";
+
+
+:root {
+  --tabs-background-color: var(--bg-color);
+}
+
+.tabs {
+  background-color: var(--tabs-background-color);
+  border-radius: @base-border-radius;
+  .tab-nav {
+    list-style-type: none;
+    margin: 0;
+    padding: @padding-container;
+    // background-color: rgba(0,0,0,0.02);
+    display: flex;
+
+    // horizontal (default)
+    padding-bottom: 0px;
+    border-radius: @base-border-radius @base-border-radius 0 0;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+
+    > .tab-navitem {
+      padding: @padding-smaller @padding-container;
+      // border: 1px solid transparent;
+      cursor: pointer;
+      // margin-bottom: -2px;
+      position: relative;
+      margin-right: 2px;
+      text-align: center;
+
+      // Since these are buttons, we don't want default button styles applied
+      background-color: transparent;
+      border-color: transparent;
+      box-shadow: none;
+      margin-bottom: 0;
+
+      // horizontal default
+      border-radius: @base-border-radius @base-border-radius 0 0;
+      &::after {
+        position: absolute;
+        content: "";
+        width: 50%;
+        height: 5px;
+        border-radius: @base-border-radius;
+        left: 25%;
+        bottom: -6px;
+        background-color: transparent;
+        transition: background-color 300ms ease;
+      }
+
+      &:hover, &:active, &:focus {
+        background-color: rgba(0,0,0,0.05);
+        &::after {
+          background-color: var(--active-bg-color);
+        }
+      }
+
+      &:focus {
+        background-color: rgba(0,0,0,0.05);
+      }
+
+      &.selected {
+        /*
+        background-color: var(--active-bg-color);
+        color: var(--active-text-color);
+        border: 1px solid rgba(0,0,0,0.1);
+        border-bottom: none;
+        box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        */
+        // /*
+        &::after {
+          background-color: var(--selection-bg-color);
+        }
+        // */
+      }
+
+      &[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+  > .tab-content {
+    padding: @padding-container;
+    min-height: 100px;
+    overflow-x: auto;
+  }
+}
+
+
+:root[data-theme="dark"] {
+  .tabs {
+    .tab-nav {
+      > .tab-navitem {
+        &:focus {
+          background-color: rgba(0,0,0,0.15);
+        }
+      }
+    }
+  }
+}
+@media (prefers-color-scheme: dark) {
+  .tabs {
+    .tab-nav {
+      > .tab-navitem {
+        &:focus {
+          background-color: rgba(0,0,0,0.15);
+        }
+      }
+    }
+  }
+}
