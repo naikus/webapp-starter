@@ -177,3 +177,4 @@ Tabs.Content = function(props) {
 Tabs.Content.displayName = "Tabs.Content";
 
 export default Tabs;
+export {useTabs};

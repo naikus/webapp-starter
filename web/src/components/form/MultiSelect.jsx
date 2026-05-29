@@ -86,7 +86,7 @@ function MultiSelect(props) {
 
     return (
       <li key={`${value}_${index}`}
-          tabIndex={index + 1}
+          tabIndex={0}
           data-value={value}
           onClick={toggleSelectItem}
           onKeyUp={toggleSelectItem}
@@ -103,6 +103,7 @@ function MultiSelect(props) {
     <ul tabIndex={0} 
         ref={listElemRef}
         data-name={name}
+        name={name}
         role="listbox"
         aria-multiselectable="true"
         className={`select multi-select ${disabled ? " disabled": ""} ${className}`}>

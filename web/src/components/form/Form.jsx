@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer, useContext, useRef, useCallback} from "react";
+import React, {useEffect, useReducer, useContext, useRef, useCallback, startTransition} from "react";
 import PropTypes from "prop-types";
 import "./style.less";
 
@@ -408,8 +408,10 @@ function Field(props) {
           const {target} = e, {value/*, disabled, readonly*/} = target, {name} = props;
           // console.debug("Dispatching", name, value);
           // console.debug("On Input", name, target);
-          updateField({name, value});
-          onInput && onInput(e);
+          startTransition(() => {
+            updateField({name, value});
+            onInput && onInput(e);
+          });
         }, 100)
         /*
         onChange: e => {

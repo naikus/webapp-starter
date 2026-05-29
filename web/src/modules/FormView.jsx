@@ -1,12 +1,13 @@
 /* global */
 
-/** @typedef {import("@components/form/rule-builder").ValidationRule} ValidationRule */
+/** @typedef {import("../components/form/rule-builder").ValidationRule} ValidationRule */
+/** @typedef {import("../components/notifications").Notify} Notify */
 
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import {useRouter} from "@components/router";
 import Actions from "@components/actionbar/Actions";
-import Tabs from "@components/tabs/Tabs";
+import Tabs, {useTabs} from "@components/tabs/Tabs";
 import {useNotifications} from "@components/notifications";
 import {
   Form,
@@ -19,6 +20,7 @@ import {
 } from "@components/form";
 
 import "./style.less";
+import { useOnMount } from "../components/util/hooks";
 
 /**
  * @type {Record<string, Array<ValidationRule>>}
@@ -55,36 +57,125 @@ Form.registerFieldType("multiselect", MultiSelect);
 Form.registerFieldType("fileupload", FileUpload);
 
 
-const MyForm = props => {
-  const {title} = props,
-      [valid, setValid] = useState(false),
-      notify = useNotifications(),
-      {router} = useRouter(),
-      [data, setData] = useState({
-        name: "Dead Pool",
-        sports: ["soccer", "hockey"],
-        files: []
-      }),
-      properties = ["--accent-color", "--selection-bg-color", "--active-bg-color", "--primary-bg-color"],
-      [colors] = useState([
-        ["rgba(184, 63, 103, 1)", "rgba(184, 63, 103, 1)", "rgba(184, 63, 103, 0.3)", "rgba(184, 63, 103, 1)"],
-        ["rgba(230, 143, 13, 1)", "rgba(230, 143, 13, 1)", "rgba(230, 143, 13, 0.2)", "rgba(230, 143, 13, 1)"],
-        ["rgba(46, 146, 196, 1)", "rgba(43, 139, 187, 1)", "rgba(55, 181, 242, 0.3)", "rgba(37, 124, 168, 1)"],
-        ["rgba(65, 67, 106, 1)",  "rgba(65, 67, 106, 1)",  "rgba(65, 67, 106, 0.3)",  "rgb(65, 67, 106)"]
-      ]),
-      chooseColor = event => {
-        const style = document.documentElement.style,
-            propVals = event.target.getAttribute("data-color").split("|");
-        properties.forEach((prop, i) => {
-          style.setProperty(prop, propVals[i]);
-        });
+Form.registerFieldType("themeswatch", function ThemeSwatch(props) {
+  const {value, defaultValue, onChange, onInput, disabled} = props,
+      properties = [
+        "--accent-color",
+        "--selection-bg-color",
+        "--active-bg-color",
+        "--primary-bg-color"
+      ],
+      [colors] = useState(new Map([
+        ["red",    ["rgba(184, 63, 103, 1)", "rgba(184, 63, 103, 1)", "rgba(184, 63, 103, 0.3)", "rgba(184, 63, 103, 1)"]],
+        ["orange", ["rgba(230, 143, 13, 1)", "rgba(230, 143, 13, 1)", "rgba(230, 143, 13, 0.2)", "rgba(230, 143, 13, 1)"]],
+        ["blue",   ["rgba(46, 146, 196, 1)", "rgba(43, 139, 187, 1)", "rgba(55, 181, 242, 0.3)", "rgba(37, 124, 168, 1)"]],
+        ["purple", ["rgba(65, 67, 106, 1)",  "rgba(65, 67, 106, 1)",  "rgba(65, 67, 106, 0.3)",  "rgb(65, 67, 106)"]]
+      ])),
+      [data, setData] = useState(value || defaultValue || ""),
+
+      createEvent = (value, ...targetAttrs) => {
+        return {
+          target: {
+            value,
+            ...targetAttrs
+          }
+        };
       },
       resetColors = () => {
         const style = document.documentElement.style;
         properties.forEach(prop => {
           style.removeProperty(prop);
         });
-      };
+        if(data !== "default") {
+          setData("default");
+          const event = createEvent("default");
+          onInput && onInput(event);
+          onChange && onChange(event);
+        }
+      },
+      setColors = theme => {
+        const style = document.documentElement.style,
+            propVals = colors.get(theme);
+
+        if(!propVals) {
+          resetColors();
+          return;
+        }
+        properties.forEach((prop, i) => {
+          style.setProperty(prop, propVals[i]);
+        });
+      },
+      setTheme = (event) => {
+        const theme = event.target.getAttribute("data-name");
+        if(data !== theme) {
+          setData(theme);
+        }
+      }
+
+  useEffect(function setTheme() {
+    setColors(data);
+    const event = createEvent(data);
+    onInput && onInput(event);
+    onChange && onChange(event);
+  }, [data]);
+
+  /*
+  useOnMount(() => {
+    return () => {
+      resetColors();
+    }
+  });
+  */
+
+  return (
+    <div className="swatches" style={{
+      display: "flex",
+      alignItems: "center"
+    }}>
+      {
+        Array.from(colors).map((e, i) => {
+          const [color, swatch] = e;
+          // console.log(swatch);
+          return <div className="swatch"
+              key={`color-${color}`}
+              title={color}
+              style={{
+                backgroundColor: swatch[0],
+                border: color === data ? "2px solid" : "none"
+              }}
+              data-name={color}
+              onClick={setTheme} />
+        })
+      }
+      <div className="swatch"
+          title="Reset colors"
+          key={`color-reset`}
+          data-name="default"
+          style={{backgroundColor: "black"}}
+          onClick={resetColors} />
+    </div>
+  );
+});
+
+
+const MyForm = props => {
+  const {title} = props,
+      [valid, setValid] = useState(false),
+      // tabs = useTabs(),
+      notify = useNotifications(),
+      {router} = useRouter(),
+      [data, setData] = useState({
+        theme: "orange",
+        name: "Dead Pool",
+        sports: ["soccer", "hockey"],
+        files: []
+      });
+
+  /*
+  useOnMount(() => {
+    notify.info(`Active tab is ${tabs.activeTab}`);
+  });
+  */
 
   return (
     <div className="my-form">
@@ -117,22 +208,7 @@ const MyForm = props => {
           setData(data);
         }}>
         <FieldGroup className="color-chooser" label="Choose Accent Color">
-          <div className="swatches">
-            {
-              colors.map((c, i) => (
-                <div className="swatch"
-                    key={`color-${i}`}
-                    style={{backgroundColor: c[0]}}
-                    data-color={c.join("|")} 
-                    onClick={chooseColor} />
-              ))
-            }
-            <div className="swatch"
-                title="Reset colors"
-                key={`color-reset`}
-                style={{backgroundColor: "black"}}
-                onClick={resetColors} />
-          </div>
+          <Field id="swatch" defaultValue={data.theme} name="theme" type="themeswatch" />
         </FieldGroup>
         <FieldGroup label="Personal Info" className="name-email" hint="Name &amp; email">
           <div className="row">
@@ -225,7 +301,7 @@ const View = props => {
       </Actions>
       <div className="content">
         <Tabs>
-          <Tabs.Nav activeTab="messages" 
+          <Tabs.Nav activeTab="form" 
               onChange={(curr, prev) => {console.log(`Tab change ${prev} -> ${curr}`)}}>
             <Tabs.NavItem target="messages">Messages</Tabs.NavItem>
             <Tabs.NavItem target="form">Form</Tabs.NavItem>
