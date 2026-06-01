@@ -2,6 +2,7 @@
 
 /** @typedef {import("../components/form/rule-builder").ValidationRule} ValidationRule */
 /** @typedef {import("../components/notifications").Notify} Notify */
+/** @typedef {import("simple-router").Router} Router */
 
 import React, {useCallback, useEffect, useState} from "react";
 import PropTypes from "prop-types";
@@ -57,7 +58,16 @@ Form.registerFieldType("multiselect", MultiSelect);
 Form.registerFieldType("fileupload", FileUpload);
 
 
-Form.registerFieldType("themeswatch", function ThemeSwatch(props) {
+/**
+ * @param {{
+ *   value: string,
+ *   defaultValue: string,
+ *   onChange: function(event): void,
+ *   onInput: function(event): void,
+ *   disabled: boolean,
+ * }} props
+ */
+function ThemeSwatch(props) {
   const {value, defaultValue, onChange, onInput, disabled} = props,
       properties = [
         "--accent-color",
@@ -128,44 +138,53 @@ Form.registerFieldType("themeswatch", function ThemeSwatch(props) {
   */
 
   return (
-    <div className="swatches" style={{
-      display: "flex",
-      alignItems: "center"
+    <div tabIndex={0} 
+      className={`swatches ${disabled ? " disabled": ""}`}
+      disabled={disabled}
+      style={{
+        display: "flex",
+        alignItems: "center"
     }}>
       {
         Array.from(colors).map((e, i) => {
           const [color, swatch] = e;
           // console.log(swatch);
-          return <div className="swatch"
+          return <button className="swatch"
               key={`color-${color}`}
+              tabIndex={0}
               title={color}
+              disabled={disabled}
               style={{
                 backgroundColor: swatch[0],
-                border: color === data ? "2px solid" : "none"
+                border: color === data ? "2px solid" : "none",
+                cursor: disabled ? "not-allowed" : "pointer"
               }}
               data-name={color}
               onClick={setTheme} />
         })
       }
-      <div className="swatch"
+      <button className="swatch"
           title="Reset colors"
           key={`color-reset`}
           data-name="default"
+          tabIndex={0}
+          disabled={disabled}
           style={{backgroundColor: "black"}}
           onClick={resetColors} />
     </div>
   );
-});
-
+}
+Form.registerFieldType("themeswatch", ThemeSwatch);
 
 const MyForm = props => {
   const {title} = props,
       [valid, setValid] = useState(false),
       // tabs = useTabs(),
       notify = useNotifications(),
+      /** @type {{router: Router}} */
       {router} = useRouter(),
       [data, setData] = useState({
-        theme: "orange",
+        theme: "red",
         name: "Dead Pool",
         sports: ["soccer", "hockey"],
         files: []
@@ -222,7 +241,7 @@ const MyForm = props => {
           ]} />
           <Field id="subs" label="Subscribe to my newsletter" name="subscribe" type="checkbox" />
         </FieldGroup>
-        <Field name="hobbies" 
+        <Field name="hobbies"
             placeholder="Enter multiple separated by comma"
             type="multival"
             label="Hobbies"
@@ -234,7 +253,7 @@ const MyForm = props => {
           // disabled={true}
           // className="horizontal"
           defaultValue={data.sports}
-          // @ts-ignore 
+          // @ts-ignore
           options={[
             {label: "Basketball", value: "basketball"},
             {label: "Soccer", value: "soccer"},
@@ -247,7 +266,7 @@ const MyForm = props => {
           multiple={true}
           defaultValue={data.files}
           disabled={data.sports && data.sports.indexOf("basketball") === -1} />
-        
+
         <div className="row">
           <button className="my-button primary" disabled={!valid} onClick={() => {
             const json = JSON.stringify(
@@ -287,6 +306,7 @@ MyForm.displayName = "MyForm";
 
 const View = props => {
   const {context: {config, data: {formTitle = "Sample Form"}}} = props,
+      /** @type {{router: Router}} */
       {router} = useRouter();
 
 
@@ -301,17 +321,29 @@ const View = props => {
       </Actions>
       <div className="content">
         <Tabs>
-          <Tabs.Nav activeTab="form" 
-              onChange={(curr, prev) => {console.log(`Tab change ${prev} -> ${curr}`)}}>
+          <Tabs.Nav activeTab="messages"
+              onChange={(curr, prev) => {
+                if(curr === "nav:about") {
+                  router.route("/about");
+                }
+              }}>
             <Tabs.NavItem target="messages">Messages</Tabs.NavItem>
             <Tabs.NavItem target="form">Form</Tabs.NavItem>
+            <Tabs.NavItem target="nav:about">About View</Tabs.NavItem>
           </Tabs.Nav>
+          {/* <Tabs.Content name="nav:about"></Tabs.Content> */}
           <Tabs.Content name="messages">
-            <p className="message">
-              Here is an example of the form with support for custom components 
-              like MultiValInput, MultiSelect and FileUpload. See
-              (<code>src/components/form</code>) for these components.
-            </p>
+            <div className="message">
+              The 'Form' tab showcases an example of the form with support for 
+              custom components like: 
+              <ul>
+                <li>MultiValInput</li>
+                <li>MultiSelect</li>
+                <li>FileUpload</li>
+                <li>ColorSwatch</li>
+              </ul>
+              See (<code>src/components/form</code>) for these components.
+            </div>
           </Tabs.Content>
           <Tabs.Content name="form">
             <MyForm title={formTitle} />
