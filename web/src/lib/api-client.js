@@ -1,3 +1,4 @@
+// "use strict"
 /* global */
 /* jshint eqnull:true */
 
@@ -131,9 +132,31 @@ const ObjectToString = Object.prototype.toString,
       if(ret && typeof ret.then === "function") {
         return ret;
       }
-      return Promise.resolve();
+      return Promise.resolve(ret);
     },
 
+    handleResponse = (context, interceptors) => {
+      // @ts-ignore
+      let resPromise = Promise.resolve();
+      /*
+      resPromise.catch(err => {
+        console.log(err);
+        throw err;
+      });
+      */
+      // const context = {path, options, request, response: resPromise};
+      resPromise = interceptors.reduce((promise, interceptor) => {
+        return promise.then(callInterceptor.bind(null, interceptor, context));
+      }, resPromise);
+
+      return resPromise.then(() => {
+        return context.response;
+      }).catch(err => {
+        // console.error(err);
+        throw err;
+      });
+      // */
+    },
 
     /**
      * ApiClient prototype object used in create function
@@ -157,7 +180,9 @@ const ObjectToString = Object.prototype.toString,
             }, opts);
         options.headers = headers;
 
-        if("FormData" in window && opts.body instanceof window.FormData) {
+        if(typeof window !== "undefined"
+              && "FormData" in window 
+              && opts.body instanceof window.FormData) {
           delete options.headers["Content-Type"];
           delete options.headers["content-type"];
         }
@@ -166,38 +191,33 @@ const ObjectToString = Object.prototype.toString,
           options.credentials = this.options.credentials;
         }
 
-        const request = new Request(url, options), context = {path, options, request, response: null};
+        const request = new Request(url, options),
+            context = {path, options, request, response: null};
 
         let promise = Promise.resolve();
+        /*
         promise.catch(err => {
-          console.log(err);
+          // console.log(err);
           throw err;
         });
+        */
         promise = this.interceptors.reduce((promise, interceptor) => {
           // here interceptors can modify request headers, etc.
           return promise.then(callInterceptor.bind(null, interceptor, context));
         }, promise);
 
         return promise.then(() => {
-          // ctx = ctx || context;
-          return fetch(request)
+          // Check if any of the interceptors already provided a response
+          let {response} = context;
+          if(response) {
+            return handleResponse(context, this.interceptors);
+          }else {
+            return fetch(request)
               .then(response => {
-                // @ts-ignore
                 context.response = response;
-                let resPromise = Promise.resolve();
-                resPromise.catch(err => {
-                  console.log(err);
-                  throw err;
-                });
-                // const context = {path, options, request, response: resPromise};
-                resPromise = this.interceptors.reduce((promise, interceptor) => {
-                  return promise.then(callInterceptor.bind(null, interceptor, context));
-                }, resPromise);
-
-                return resPromise.then(() => {
-                  return context.response;
-                });
+                return handleResponse(context, this.interceptors);
               });
+          }
         });
       },
 
@@ -236,7 +256,7 @@ const ObjectToString = Object.prototype.toString,
 // Add convenience functions for get, put, post, delete http methods
 ["get", "post", "put", "delete"].forEach(function(m) {
   ApiClientProto[m] = function(path, opts) {
-    const callOpts = opts || {};
+    const callOpts = Object.assign({}, opts || {});
     callOpts.method = m.toUpperCase();
     return this.call(path, callOpts);
   };
@@ -284,7 +304,7 @@ async function responseAsJson(response) {
       }).catch(error => {
         return response.text().then(text => {
           const err = new Error(text);
-          error.code = response.code || response.statusCode;
+          error.statusText = response.statusText;
           error.status = response.status;
           reject(err);
         });
