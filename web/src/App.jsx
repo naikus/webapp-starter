@@ -233,7 +233,8 @@ function App({appBarPosition = "left"}) {
   */
 
   // Router setup
-  useOnMount(function setupRouter() {
+  // useOnMount(function setupRouter() {
+  useEffect(function setupRouter() {
     /** @type {Router} */
     // @ts-ignore
     const router = createRouter(routes, {
@@ -302,7 +303,7 @@ function App({appBarPosition = "left"}) {
       router.stop();
       setRouter(null);
     };
-  });
+  }, []);
 
   if(!router) {
     // This message is because changes to the App.jsx don't work with viet hot reloading since the
