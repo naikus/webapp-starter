@@ -12,5 +12,5 @@ import RouterContext from "./Context";
  */
 export default function useRouter() {
   const router = useContext(RouterContext);
-  return {route: router && router.getCurrentRoute(), router}
+  return {route: router && router.getCurrentRoute(), router};
 }

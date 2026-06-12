@@ -6,11 +6,12 @@ const View = props => {
   const {context: {config, data = {}}} = props,
       {route, router} = useRouter(),
       goBack = useCallback(() => {
-        if(!route.from) {
-          // This view was loaded from the browser directly (not navigated through app)
-          router.route("/");
-        }else {
+        const r = router.getCurrentRoute(), {from} = r;
+        if(from && from.path !== r.path) {
           router.back();
+        }else {
+          // router.route("/landing?message=Hello+World");
+          router.route("/");
         }
       }, [route, router]);
 

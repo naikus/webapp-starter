@@ -184,7 +184,7 @@ const MyForm = props => {
       /** @type {{router: Router}} */
       {router} = useRouter(),
       [data, setData] = useState({
-        theme: "red",
+        theme: "orange",
         name: "Dead Pool",
         sports: ["soccer", "hockey"],
         files: []
@@ -305,7 +305,7 @@ const MyForm = props => {
 MyForm.displayName = "MyForm";
 
 const View = props => {
-  const {context: {config, data: {formTitle = "Sample Form"}}} = props,
+  const {context: {config, data: {formTitle = "Sample Form"} = {}}} = props,
       /** @type {{router: Router}} */
       {router} = useRouter();
 
