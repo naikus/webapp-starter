@@ -306,7 +306,8 @@ function App({appBarPosition = "left"}) {
           }),
           router.on("route-abort", event => {
             const {path, reason: {name, data}} = event.detail;
-            notify.warn(`Route ${path} aborted. Reason: ${name}:${data}`);
+            // notify.warn(`Route ${path} aborted. Reason: ${name}:${data}`);
+            console.log("Route abort", name, path, data);
           })
         ];
 
@@ -315,7 +316,7 @@ function App({appBarPosition = "left"}) {
 
     // const timeoutId = setTimeout(() => {
     router.route(router.getBrowserRoute() || "/");
-    // }, 10);
+    // }, 50);
 
     return () => {
       // clearTimeout(timeoutId);
