@@ -15,8 +15,13 @@ const rules = {
       "return": { "after": true },
       "else": { "after": true, "before": false },
       "const": { "after": true },
+      "let": { "after": true },
       "case": { "after": true },
-      "try": { "after": true }
+      "try": { "after": true },
+      "import": {"after": true },
+      "export": {"after": true },
+      "from": {"before": true, "after": true},
+      "default": {"after": true}
     }
   }],
   "space-before-function-paren": [0, "never"],

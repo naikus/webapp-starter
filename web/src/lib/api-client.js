@@ -1,4 +1,4 @@
-// "use strict"
+"use strict";
 /* global */
 /* jshint eqnull:true */
 
@@ -19,12 +19,11 @@
  * @property {Record<string, string|number>} headers The default headers for the API client
  * @property {string} redirect The default redirect option for the API client: "follow"
  * @property {[function(InterceptorContext):Promise]} [interceptors] An array of request or response interceptors
- * 
  */
 
 /**
  * @typedef {(context:InterceptorContext) => void} Interceptor
- * 
+ *
  * @typedef ApiClient
  * @property {Array<Interceptor>} interceptors
  * @property {ApiOptions} options
@@ -181,7 +180,7 @@ const ObjectToString = Object.prototype.toString,
         options.headers = headers;
 
         if(typeof window !== "undefined"
-              && "FormData" in window 
+              && "FormData" in window
               && opts.body instanceof window.FormData) {
           delete options.headers["Content-Type"];
           delete options.headers["content-type"];
