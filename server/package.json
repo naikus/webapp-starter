@@ -19,7 +19,7 @@
     "@fastify/formbody": "8.0.1",
     "@fastify/helmet": "12.0.1",
     "@fastify/multipart": "9.0.3",
-    "@fastify/static": "^8.0.1",
+    "@fastify/static": "^10.1.3",
     "@fastify/swagger": "9.1.0",
     "@fastify/websocket": "11.0.1",
     "@scalar/fastify-api-reference": "1.28.32",
