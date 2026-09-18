@@ -1,5 +1,7 @@
 /**
+ * @typedef {import("http").Server} Server
  * @typedef {import("fastify").FastifyInstance} FastifyInstance
+ * @typedef {import("fastify").FastifyHttpOptions<Server>} FastifyHttpOptions
  * @typedef {import("fastify").FastifyPluginOptions} PluginOpts
  * @typedef {import("fastify").onRequestHookHandler} RequestHandler
  */
@@ -28,6 +30,7 @@ const fs = require("fs"),
  */
 function createWebServer(config) {
   const {webserver: {ssl: {enabled: sslEnable, key: keyPath, cert: certPath}, security}, webapp} = config,
+      /** @type {FastifyHttpOptions} */
       serverOpts = {
         // logger: false,
         ///*
