@@ -5,10 +5,6 @@
 @form-component-border-radius: @input-border-radius;
 @form-component-padding: @padding-smaller;
 
-:root {
-
-}
-
 input,
       button,
       select,
@@ -85,16 +81,22 @@ textarea {
   border-bottom: 3px solid rgba(0,0,0,0.08);
   cursor: pointer;
   text-align: center;
+
+  // for icon buttons
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   ._no-select;
 
   &.ghost {
-    background-color: transparent; // var(--bg-color);
+    background-color: var(--bg-color);
     border-color: transparent;
     &:hover, &:focus {
       background-color: var(--button-bg-color);
       border-color: transparent;
-      box-shadow: none;
     }
+
   }
 
   &:hover {
@@ -147,6 +149,10 @@ textarea {
   > .icon {
     display: inline-block;
     margin: 0 7px;
+
+    // for svg icons
+    width: 20px;
+    height: 20px;
   }
 
   &.small {
@@ -178,10 +184,10 @@ input[type=range] {}
 }
 .thumb-style {
   -webkit-appearance: none;
-  width: 1.5em;
-  height: 1.5em;
+  width: 1.3rem;
+  height: 1.3rem;
   border-radius: 50%;
-  background-color: var(--selection-bg-color);
+  background-color: var(--accent-color);
   margin-top: -0.6em;
   border: none;
 }

@@ -89,7 +89,7 @@ function MultiValInput(props) {
     return (
       <span key={key} className={`value-item${disabled ? " disabled" : ""}`}>
         {value}
-        <i data-value={value} className="icon icon-x-circle" onClick={removeValue} />
+        <span data-value={value} className="icon" onClick={removeValue}>x</span>
       </span>
     );
   });

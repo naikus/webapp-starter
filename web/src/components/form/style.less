@@ -20,6 +20,7 @@ form {
       opacity: 0.0;
       position: absolute;
       cursor: pointer;
+      z-index: 1;
     }
     .indicator {
       display: flex;
@@ -61,14 +62,13 @@ form {
     align-items: center;
     justify-content: center;
     &::after {
-      width: 4px;
-      height: 8px;
+      width: @radio-indictor-size - 10;
+      height: @radio-indictor-size - 5;
 
-      width: @radio-indictor-size - 8;
-      height: @radio-indictor-size - 3;
-
-      border: solid var(--accent-text-color);
-      border-width: 0px 3px 3px 0px;
+      // border: solid var(--accent-text-color);
+      border-style: solid;
+      border-color: var(--accent-text-color);
+      border-width: 0px 4px 4px 0px;
       transform: scale(0.6) translateY(-2px) rotate(40deg);
       // top: 3px;
       // left: 5px;
@@ -241,6 +241,20 @@ form {
 }
 
 
+.range-input {
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  .value {
+    min-width: 30px;
+    text-align: center;
+    padding: @padding-tiny;
+    margin: @padding-tiny;
+    background-color: var(--bg-color);
+    border-radius: @input-border-radius;
+  }
+}
+
 .multi-val-input {
   @disabled-opacity: 0.5;
 
@@ -263,8 +277,9 @@ form {
       opacity: 0.9;
 
       .icon {
-        padding-left: @base-unit + 4px;
+        margin-left: @base-unit + 2px;
         cursor: pointer;
+        display: inline-block;
       }
 
       &:hover {
@@ -300,13 +315,13 @@ form {
   .action {
     // display: inline;
     width: auto;
-    padding: @padding-smaller;
+    padding: @padding-smaller - 2px;
     margin: 0 2px;
     cursor: pointer;
     border: none;
     // border-radius: @input-border-radius;
     background-color: transparent;
-    // font-size: 1.1rem;
+    font-size: 0.9rem;
     &:hover {
       color: var(--accent-color);
       // background-color: rgba(0,0,0,0.04);
@@ -332,7 +347,7 @@ form {
     border-radius: @input-border-radius;
     border: 1px solid rgba(0,0,0,0.1);
     > .actions {
-      padding: @padding-tiny;
+      padding: @padding-tiny + 2;
       display: flex;
       // flex-direction: row-reverse;
       justify-content: flex-end;

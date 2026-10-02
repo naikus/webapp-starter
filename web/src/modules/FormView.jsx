@@ -184,7 +184,7 @@ const MyForm = props => {
       /** @type {{router: Router}} */
       {router} = useRouter(),
       [data, setData] = useState({
-        theme: "orange",
+        theme: "red",
         name: "Dead Pool",
         sports: ["soccer", "hockey"],
         files: []
@@ -321,7 +321,7 @@ const View = props => {
       </Actions>
       <div className="content">
         <Tabs>
-          <Tabs.Nav activeTab="messages"
+          <Tabs.Nav activeTab="form"
               onChange={(curr, prev) => {
                 if(curr === "nav:about") {
                   router.route("/about");
