@@ -290,12 +290,12 @@ const MyForm = props => {
               type: "toast"
             });
           }}>
-            <i className="icon-save" /> Submit
+            <i className="icon icon-save" /> Submit
           </button>
           <button className="ghost" onClick={() => (
               router && router.back("/")
             )}>
-            <i className="icon-home" /> Home
+            <i className="icon icon-home" /> Home
           </button>
         </div>
       </Form>
