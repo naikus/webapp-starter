@@ -45,12 +45,15 @@
         display: flex;
       }
       // justify-content: center;
-      .swatch {
+      button.swatch {
         cursor: pointer;
         width: 30px;
         height: 30px;
         border-radius: 50%;
         margin-right: 6px;
+        &:focus {
+          box-shadow: 0 0 0px 2px var(--input-focus-ring-color);
+        }
       }
     }
 

@@ -91,7 +91,7 @@ function MultiSelect(props) {
           onClick={toggleSelectItem}
           onKeyUp={toggleSelectItem}
           className={`multi-select-item${selected ? " selected" : ""}`}
-          role="listitem"
+          role="option"
           // @ts-ignore
           disabled={disabled}>
         {option.label}

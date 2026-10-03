@@ -1,6 +1,12 @@
 @import "@less/vars.less";
 @import "@less/css-helpers.less";
 
+
+svg.logo {
+  stroke: var(--accent-color);
+  stroke-width: 1;
+}
+
 // /*
 .progress.global {
   position: absolute;
@@ -22,10 +28,6 @@
     padding: 0 @padding-default;
     display: flex;
     align-items: center;
-    img.logo {
-      width: 45px;
-      height: 45px;
-    }
     .title {
       cursor: pointer;
       text-transform: uppercase;
